@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · ELMS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand-mark">
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="ELMS logo">
+      <span>ELMS</span>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-item active">📊 Dashboard</div>
+      <div class="nav-item">🗓️ My Leaves</div>
+      <div class="nav-item">✅ Approvals</div>
+      <div class="nav-item">👥 Employees</div>
+      <div class="nav-item">🏢 Departments</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Account</div>
+      <div class="nav-item">⚙️ Profile Settings</div>
+      <div class="nav-item" id="logoutBtn">🚪 Sign out</div>
+    </div>
+
+    <div class="sidebar-footer">ABC Technologies<br>ELMS v1.0</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Organization dashboard</h1>
+        <p class="topbar-sub">Live metrics from <span class="api-tag">GET /api/dashboard</span></p>
+      </div>
+      <div class="user-chip">
+        <div class="user-avatar" id="userInitials">--</div>
+        <div>
+          <div id="userName" style="font-weight:600;">Loading…</div>
+          <div id="userRole" style="color:var(--slate-soft); font-size:11.5px;">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert error" id="dashError" style="display:none;"></div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total employees</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-accent total"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pending leaves</div>
+        <div class="stat-value" id="statPending">—</div>
+        <div class="stat-accent pending"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Approved leaves</div>
+        <div class="stat-value" id="statApproved">—</div>
+        <div class="stat-accent approved"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Rejected leaves</div>
+        <div class="stat-value" id="statRejected">—</div>
+        <div class="stat-accent rejected"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Pending approvals</h3>
+        <span class="api-tag">GET /api/leaves/pending</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Employee</th><th>Type</th><th>Dates</th><th>Days</th><th>Status</th></tr>
+        </thead>
+        <tbody id="pendingTableBody">
+          <tr><td colspan="5" class="empty-note">Loading pending requests…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>API routes powering this screen</h3>
+      </div>
+      <table>
+        <thead><tr><th>Method</th><th>Route</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><span class="api-tag">POST</span></td><td>/api/auth/login</td><td>Authenticate and issue a JWT</td></tr>
+          <tr><td><span class="api-tag">GET</span></td><td>/api/auth/me</td><td>Load the signed-in profile</td></tr>
+          <tr><td><span class="api-tag">GET</span></td><td>/api/dashboard</td><td>Org-wide leave metrics (cached 60s)</td></tr>
+          <tr><td><span class="api-tag">GET</span></td><td>/api/leaves/pending</td><td>Requests awaiting manager/HR action</td></tr>
+          <tr><td><span class="api-tag">PUT</span></td><td>/api/leaves/{id}/approve</td><td>Approve a pending request</td></tr>
+          <tr><td><span class="api-tag">PUT</span></td><td>/api/leaves/{id}/reject</td><td>Reject with a required comment</td></tr>
+          <tr><td><span class="api-tag">GET</span></td><td>/api/leave-balances/{employeeId}</td><td>Sick / casual / earned balances</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
