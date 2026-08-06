@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in · ELMS — Employee Leave Management System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- LEFT: Brand panel with the signature "leave calendar strip" -->
+  <div class="brand-panel">
+    <div class="brand-mark">
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="ELMS logo">
+      <span>ELMS</span>
+    </div>
+
+    <div class="brand-copy">
+      <div class="brand-eyebrow">ABC Technologies · Internal Platform</div>
+      <h1>One place to plan, request, and approve every day off.</h1>
+      <p>Employee Leave Management System gives employees, managers, and HR a single
+         source of truth for leave balances, approvals, and organization-wide policy.</p>
+
+      <div class="calendar-strip">
+        <div class="calendar-strip-header">
+          <span>JULY 2026</span>
+          <span>TEAM VIEW</span>
+        </div>
+        <div class="calendar-strip-row">
+          <div class="day-cell"></div>
+          <div class="day-cell"></div>
+          <div class="day-cell pending"></div>
+          <div class="day-cell approved"></div>
+          <div class="day-cell approved"></div>
+          <div class="day-cell approved"></div>
+          <div class="day-cell"></div>
+        </div>
+        <div class="calendar-strip-legend">
+          <span><i class="legend-dot approved"></i>Approved leave</span>
+          <span><i class="legend-dot pending"></i>Pending approval</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-footer">© 2026 ABC Technologies · Employee Leave Management System</div>
+  </div>
+
+  <!-- RIGHT: Login form -->
+  <div class="form-panel">
+    <div class="form-card">
+      <div class="mobile-brand">
+        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="ELMS logo">
+        <span>ELMS</span>
+      </div>
+
+      <h2>Welcome back</h2>
+      <p class="subtitle">Sign in with your company account to view leave balances,
+         submit requests, or manage your team's approvals.</p>
+
+      <div class="alert error" id="loginError"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Work email</label>
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/>
+            </svg>
+            <input type="email" id="email" name="email" placeholder="you@abctechnologies.com" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" class="toggle-visibility" id="togglePassword" aria-label="Show password">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="row-between">
+          <label class="checkbox-line">
+            <input type="checkbox" id="remember"> Keep me signed in
+          </label>
+          <a class="link-btn" href="{{ url_for('forgot_password_page') }}">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary" id="loginBtn">
+          <span class="spinner" id="loginSpinner"></span>
+          <span id="loginBtnText">Sign in</span>
+        </button>
+      </form>
+
+      <p class="divider-note">
+        Don't have an account yet? Contact your HR admin to be provisioned.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>
