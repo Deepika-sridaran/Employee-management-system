@@ -11,7 +11,7 @@ export async function getAllEmployees() {
 }
 export async function getEmployeeById(id) {
 
-    const response = await fetch ('${API_URL}/${id}');
+    const response = await fetch(`${API_URL}/${id}`);
 
     if (!response.ok){
         throw new Error("Failed to fetch Employee");
@@ -30,9 +30,9 @@ export async function createEmployee(employee) {
 }
 export async function updateEmployee(id, employee) {
     
-    const response = await fetch('${API_URL}/${id}', {method: "PUT", 
-        headers: {"Content-Type": "application/json"}, body: JSON.stringify(employee)});
-
+    const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(employee)});
         if (!response.ok){
             throw new Error("Failed to Update Employee");
         }
@@ -40,8 +40,8 @@ export async function updateEmployee(id, employee) {
 }
 export async function deleteEmployee(id) {
 
-    const response = await fetch('${API_URL}/${id}', {
-        method: "DELETE"});
+    const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE"});
 
     if (!response.ok) {
         throw new Error("Failed to delete employee");
