@@ -80,6 +80,37 @@ INSERT INTO `employees` VALUES (9,1,'Sathish','Kumar','sathish.employee@gmail.co
 UNLOCK TABLES;
 
 --
+-- Table structure for table `password_reset_tokens`
+--
+
+DROP TABLE IF EXISTS `password_reset_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_reset_tokens` (
+  `token_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expires_at` timestamp NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`token_id`),
+  UNIQUE KEY `token` (`token`),
+  KEY `fk_password_reset_user` (`user_id`),
+  CONSTRAINT `fk_password_reset_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_reset_tokens`
+--
+
+LOCK TABLES `password_reset_tokens` WRITE;
+/*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
+INSERT INTO `password_reset_tokens` VALUES (1,1,'test-token-12345','2026-08-12 05:50:23',0,'2026-08-12 05:20:23');
+/*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -117,4 +148,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-08-07 11:54:59
+-- Dump completed on 2026-08-12 11:02:02
