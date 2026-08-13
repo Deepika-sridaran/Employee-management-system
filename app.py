@@ -5,8 +5,9 @@ from config import Config
 from extensions import db, bcrypt, jwt, mail
 
 from routes.auth import auth_bp
-from routes.employee_routes import employee_bp
 from routes.dashboard_routes import dashboard_bp
+from routes.employee_routes import employee_bp
+from routes.profile_routes import profile_bp
 
 
 def create_app():
@@ -28,6 +29,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(employee_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(profile_bp)
 
     @app.route("/")
     def home():

@@ -1,6 +1,6 @@
 from models.employee_model import Employee
 from models.department_model import Department
-from models.user_model import User
+from models.user import User
 
 
 def get_dashboard():

@@ -4,11 +4,10 @@ import re
 from flask import request
 from werkzeug.utils import secure_filename
 
-from models import db
+from extensions import db
 from models.department_model import Department
 from models.employee_model import Employee
-from models.user_model import User
-
+from models.user import User
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
