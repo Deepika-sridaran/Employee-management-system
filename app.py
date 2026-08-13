@@ -2,36 +2,40 @@ from flask import Flask
 from flask_cors import CORS
 
 from config import Config
-from models import db
+from extensions import db, bcrypt, jwt, mail
+
+from routes.auth import auth_bp
 from routes.employee_routes import employee_bp
 from routes.dashboard_routes import dashboard_bp
 
+
 def create_app():
-    # Create the Flask application
     app = Flask(__name__)
 
-    # Load configuration from config.py
+    # Load configuration
     app.config.from_object(Config)
 
-    # Connect SQLAlchemy with Flask
+    # Initialize extensions
     db.init_app(app)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
+    mail.init_app(app)
 
-    # Allow frontend JavaScript to access backend APIs
+    # Enable CORS
     CORS(app)
 
-    # Register employee routes
+    # Register blueprints
+    app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(employee_bp)
     app.register_blueprint(dashboard_bp)
 
-    # Home API
     @app.route("/")
     def home():
         return {
             "success": True,
-            "message": "Employee Management System backend is running"
+            "message": "Employee Management System API is running"
         }, 200
 
-    # Database connection test API
     @app.route("/database-test")
     def database_test():
         try:
@@ -52,10 +56,8 @@ def create_app():
     return app
 
 
-# Create the application
 app = create_app()
 
 
-# Start Flask server
 if __name__ == "__main__":
     app.run(debug=True)
