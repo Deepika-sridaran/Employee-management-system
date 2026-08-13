@@ -14,34 +14,22 @@ function Sidebar() {
     >
         <h3>Menu</h3>
         <p>
-        <Link to="/dashboard">
-            Dashboard
-        </Link>
+        <Link to="/dashboard">Dashboard</Link>
         </p>
         <p>
-        <Link to="/employees">
-            Employees
-        </Link>
+        <Link to="/employee-list">Employees</Link>
         </p>
         <p>
-        <Link to="/add-employee">
-            Add Employee
-        </Link>
+        <Link to="/add-employee">Add Employee</Link>
         </p>
         <p>
-        <Link to="/employee-list">
-            Employee List
-        </Link>
+        <Link to="/employee-list">Employee List</Link>
         </p>
         <p>
-        <Link to="/profile">
-            Profile
-        </Link>
+        <Link to="/profile">Profile</Link>
         </p>
         <p>
-        <Link to="/">
-            Logout
-        </Link>
+        <Link to="/">Logout</Link>
         </p>
         </div>
   );
