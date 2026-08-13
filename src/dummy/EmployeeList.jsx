@@ -41,6 +41,8 @@ function EmployeeList() {
                         <th>Phone</th>
                         <th>Department</th>
                         <th>Designation</th>
+                        <th>Address</th>
+                        <th>Profile_Image</th>
                         <th>Actions</th>
                     </tr>
 
@@ -51,18 +53,14 @@ function EmployeeList() {
                     {employees.map((employee) => (
 
                         <tr key={employee.id}>
-
                             <td>{employee.id}</td>
-
                             <td>{employee.name}</td>
-
                             <td>{employee.email}</td>
-
                             <td>{employee.phone}</td>
-
                             <td>{employee.department}</td>
-
                             <td>{employee.designation}</td>
+                            <td>{employee.address}</td>
+                            <td>{employee.profile_image}</td>
 
                             <td>
 
