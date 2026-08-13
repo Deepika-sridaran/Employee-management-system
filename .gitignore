@@ -7,15 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Node
+node_modules/
+dist/
+dist-ssr/
 *.local
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,7 +24,12 @@ dist-ssr
 *.sln
 *.sw?
 
-.env
+# Python / Flask
 venv/
+.env
 __pycache__/
 *.pyc
+
+# Uploaded profile images
+uploads/*
+!uploads/.gitkeep
