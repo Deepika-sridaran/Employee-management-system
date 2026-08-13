@@ -4,7 +4,7 @@ from flask_cors import CORS
 from config import Config
 from models import db
 from routes.employee_routes import employee_bp
-
+from routes.dashboard_routes import dashboard_bp
 
 def create_app():
     # Create the Flask application
@@ -21,6 +21,7 @@ def create_app():
 
     # Register employee routes
     app.register_blueprint(employee_bp)
+    app.register_blueprint(dashboard_bp)
 
     # Home API
     @app.route("/")
