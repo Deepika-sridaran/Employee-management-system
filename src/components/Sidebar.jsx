@@ -1,37 +1,35 @@
-import {Link} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  }
+
   return (
-    <div
-    style={{
-      width: "250px",
-      background: "#222",
-      padding: "20px",
-      minHeight: "500vh",
-      color: "white",
-      boxSizing: "border-box"
-    }}
-    >
-        <h3>Menu</h3>
-        <p>
-        <Link to="/dashboard">Dashboard</Link>
-        </p>
-        <p>
-        <Link to="/employee-list">Employees</Link>
-        </p>
-        <p>
-        <Link to="/add-employee">Add Employee</Link>
-        </p>
-        <p>
-        <Link to="/employee-list">Employee List</Link>
-        </p>
-        <p>
-        <Link to="/profile">Profile</Link>
-        </p>
-        <p>
-        <Link to="/">Logout</Link>
-        </p>
-        </div>
+    <div className="app-sidebar">
+      <h3>Menu</h3>
+
+      <NavLink to="/dashboard" className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}>
+        Dashboard
+      </NavLink>
+      <NavLink to="/employee-list" className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}>
+        Employee List
+      </NavLink>
+      <NavLink to="/add-employee" className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}>
+        Add Employee
+      </NavLink>
+      <NavLink to="/profile" className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}>
+        Profile
+      </NavLink>
+
+      <div className="sidebar-logout">
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    </div>
   );
 }
 export default Sidebar;

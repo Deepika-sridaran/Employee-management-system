@@ -1,4 +1,5 @@
 from models import db
+from datetime import datetime
 
 
 class Employee(db.Model):
@@ -15,7 +16,7 @@ class Employee(db.Model):
     salary = db.Column(db.Numeric(12, 2), nullable=True)
     address = db.Column(db.String(255), nullable=True)
     profile_image = db.Column(db.String(255), nullable=True)
-    created_at = db.Column(db.DateTime, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
     def to_dict(self):
         return {

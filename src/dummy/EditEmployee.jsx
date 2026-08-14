@@ -1,109 +1,123 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getAllEmployees, updateEmployee, getAllDepartments } 
+from "../services/employeeServices.js";
 
 function EditEmployee() {
     const navigate = useNavigate();
+    const { id } = useParams(); // matches the :id in your route, e.g. /edit-employee/:id
 
-    const [name, setName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [department, setDepartment] = useState("");
+    const [departmentId, setDepartmentId] = useState("");
     const [designation, setDesignation] = useState("");
+    const [departments, setDepartments] = useState([]);
+    const [salary, setSalary] = useState("");
+    const [address, setAddress] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
-    function handleUpdate(e) {
+    useEffect(() => {
+    getAllDepartments().then(setDepartments).catch(console.error);}, []);
+
+    useEffect(() => {
+        async function loadEmployee() {
+            try {
+                const employees = await getAllEmployees();
+                const employee = employees.find(
+                    (e) => e.employee_id === Number(id)
+                );
+                if (!employee) {
+                    alert("Employee not found");
+                    navigate("/employee-list");
+                    return;
+                }
+                setFirstName(employee.first_name || "");
+                setLastName(employee.last_name || "");
+                setEmail(employee.email || "");
+                setPhone(employee.phone || "");
+                setDepartmentId(employee.department_id ?? "");
+                setDesignation(employee.designation || "");
+                setSalary(employee.salary ?? "");
+                setAddress(employee.address || "");
+            } catch (error) {
+                alert("Failed to load employee: " + error.message);
+                navigate("/employee-list");
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadEmployee();
+    }, [id, navigate]);
+
+    async function handleUpdate(e) {
         e.preventDefault();
-
-        if(name === ""){
-            alert("Please enter employee name");
-            return;
+        setSaving(true);
+        try {
+            await updateEmployee(id, {
+                first_name: firstName,
+                last_name: lastName,
+                email,
+                phone,
+                department_id: departmentId ? Number(departmentId) : null,
+                designation,
+                salary: salary ? Number(salary) : null,
+                address,});
+            alert("Employee updated successfully!");
+            navigate("/employee-list");
+        } catch (error) {
+            alert("Failed to update: " + error.message);
+        } finally {
+            setSaving(false);
         }
-        if(email === ""){
-            alert("Please enter employee email");
-            return;
-        }
-        if(phone === ""){
-            alert("Please enter employee phone");
-            return;
-        }
-        if(department === ""){
-            alert("Please select department");
-            return;
-        }
-        if(designation === ""){
-            alert("Please select designation");
-            return;
-        }
-        alert(
-            "Employee updated successfully!\n\n" +
-            "Name: " + name + "\n" +
-            "Email: " + email + "\n" +
-            "Phone: " + phone + "\n" +
-            "Department: " + department + "\n" +
-            "Designation: " + designation
-        );
-        navigate("/employee-list");
     }
+
+    if (loading) return <div>Loading employee…</div>;
+
     return (
         <div>
             <h1>Edit Employee</h1>
             <form onSubmit={handleUpdate}>
                 <div>
-                    <label>Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
+                    <label>First Name</label>
+                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
-                <br/>
+                <br />
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                </div>
+                <br />
                 <div>
                     <label>Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
-                <br/>
+                <br />
                 <div>
                     <label>Phone</label>
-                    <input
-                        type="text"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
+                    <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
-                <br/>
+                <br />
                 <div>
                     <label>Department</label>
-                    <select
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
-                    >
-                        <option value="">Select Department</option>
-                        <option value="IT">IT</option>
-                        <option value="HR">HR</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Testing">Testing</option>
+                    <select value={departmentId} onChange={(e) => setDepartmentId(e.target.value)}>
+                    <option value="">Select Department</option>
+                    {departments.map((d) => (
+                    <option key={d.department_id} value={d.department_id}>
+                    {d.department_name}
+                    </option>))}
                     </select>
                 </div>
-                <br/>
+                <br />
                 <div>
                     <label>Designation</label>
-                    <br/>
-                    <input
-                        type="text"
-                        value={designation}
-                        onChange={(e) => setDesignation(e.target.value)}
-                    />
+                    <input type="text" value={designation} onChange={(e) => setDesignation(e.target.value)} />
                 </div>
-                <br/>
-                <button type="submit">Update Employee</button>
-                <button type="button" onClick={() => navigate("/employee-list")}>
-                    cancel
-                </button>
+                <br />
+                <button type="submit" disabled={saving}>{saving ? "Saving…" : "Update Employee"}</button>
+                <button type="button" onClick={() => navigate("/employee-list")}>Cancel</button>
             </form>
         </div>
     );

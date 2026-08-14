@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {getAllEmployees,deleteEmployee} from "../services/employeeServices.js";
+import { getAllEmployees, deleteEmployee } from "../services/employeeServices.js";
 
 function EmployeeList() {
     const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
+
     useEffect(() => {
         async function loadEmployees() {
             try {
@@ -15,20 +16,22 @@ function EmployeeList() {
                 alert("Failed to Load Employees");
             }
         }
-        loadEmployees();}, []);
+        loadEmployees();
+    }, []);
 
-    async function handleDelete(id) {
+    async function handleDelete(employeeId) {
         try {
-            await deleteEmployee(id);
-            setEmployees((previousEmployees) =>
-                previousEmployees.filter(
-                    (employee) => employee.id !== id));
+            await deleteEmployee(employeeId);
+            setEmployees((previous) =>
+                previous.filter((employee) => employee.employee_id !== employeeId)
+            );
             alert("Employee Deleted Successfully");
         } catch (error) {
             console.error("Error deleting employee:", error);
             alert("Failed to Delete Employee");
         }
     }
+
     return (
         <div>
             <h1>Employee List</h1>
@@ -39,46 +42,29 @@ function EmployeeList() {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Department</th>
+                        <th>Department ID</th>
                         <th>Designation</th>
                         <th>Address</th>
-                        <th>Profile_Image</th>
                         <th>Actions</th>
                     </tr>
-
                 </thead>
-
                 <tbody>
-
                     {employees.map((employee) => (
-
-                        <tr key={employee.id}>
-                            <td>{employee.id}</td>
-                            <td>{employee.name}</td>
+                        <tr key={employee.employee_id}>
+                            <td>{employee.employee_id}</td>
+                            <td>{employee.first_name} {employee.last_name}</td>
                             <td>{employee.email}</td>
                             <td>{employee.phone}</td>
-                            <td>{employee.department}</td>
+                            <td>{employee.department_id ?? "—"}</td>
                             <td>{employee.designation}</td>
                             <td>{employee.address}</td>
-                            <td>{employee.profile_image}</td>
-
                             <td>
-
                                 <button
-                                    onClick={() =>
-                                        navigate(
-                                            `/edit-employee/${employee.id}`
-                                        )
-                                    }
+                                    onClick={() => navigate(`/edit-employee/${employee.employee_id}`)}
                                 >
                                     Edit
                                 </button>
-
-                                <button
-                                    onClick={() =>
-                                        handleDelete(employee.id)
-                                    }
-                                >
+                                <button onClick={() => handleDelete(employee.employee_id)}>
                                     Delete
                                 </button>
                             </td>
@@ -89,4 +75,5 @@ function EmployeeList() {
         </div>
     );
 }
+
 export default EmployeeList;

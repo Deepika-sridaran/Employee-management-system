@@ -1,14 +1,11 @@
+import logo from "../assets/logo.svg";
+
 function Navbar() {
   return (
-    <div
-      style={{
-        background: "#65fc4d", 
-        color: "white", 
-        padding: "15px"
-      }}
-    >
+    <div className="app-navbar">
+      <img src={logo} alt="EMS logo" />
       <h2>Employee Leave Management System</h2>
-      </div>
+    </div>
   );
 }
 export default Navbar;

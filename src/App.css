@@ -1,52 +1,141 @@
+/* ===== Split-screen layout (Login.jsx) ===== */
 .auth-wrapper {
-  background-color: #f0f4f8;
+  background: var(--ems-mist);
 }
 
 .auth-container {
-  min-height: 600px;
+  min-height: 560px;
 }
 
 .auth-left {
-  width: 42%;
-  background: linear-gradient(160deg, #1e3a5f, #0f2440);
-}
-
-.auth-right {
-  width: 58%;
+  background: linear-gradient(160deg, var(--ems-navy) 0%, var(--ems-navy-light) 100%);
+  flex: 1;
 }
 
 .brand-icon {
-  width: 70px;
-  height: 70px;
-  background: rgba(255, 255, 255, 0.15);
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--ems-amber);
 }
 
 .divider {
-  width: 50px;
+  width: 48px;
   height: 3px;
-  background: #60a5fa;
+  background: var(--ems-amber);
+  border-radius: 3px;
 }
 
 .illustration-box {
-  width: 140px;
-  height: 140px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 32px;
+  color: var(--ems-amber);
 }
 
-.illustration-box i {
-  font-size: 55px;
-  color: #93c5fd;
+.auth-right {
+  flex: 1;
 }
 
-/* Mobile */
-@media (max-width: 767.98px) {
-  .auth-left {
-    display: none !important;
-  }
+/* ===== Centered card layout (Register.jsx, ForgotPassword.jsx) ===== */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(160deg, var(--ems-navy) 0%, var(--ems-navy-light) 100%);
+}
 
-  .auth-right {
-    width: 100%;
-  }
+.login-card {
+  position: relative;
+  z-index: 1;
+  background: var(--ems-white);
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 24px 48px -12px rgba(20, 33, 61, 0.35);
+}
+
+.system-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ems-navy);
+}
+
+.lock-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ems-mist);
+  color: var(--ems-amber-dark);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px auto 16px;
+}
+
+.welcome-title {
+  font-weight: 700;
+  color: var(--ems-navy);
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--ems-slate-soft);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* ===== Shared form styling (both layouts) ===== */
+.input-field .input-icon {
+  background: var(--ems-white);
+  border-color: var(--ems-border);
+  color: var(--ems-slate-soft);
+}
+
+.form-input, .auth-right .form-control {
+  border-color: var(--ems-border);
+}
+
+.form-input:focus, .auth-right .form-control:focus {
+  border-color: var(--ems-navy-light);
+  box-shadow: 0 0 0 3px rgba(31, 59, 102, 0.15);
+}
+
+.eye-icon {
+  cursor: pointer;
+}
+
+.login-btn, .auth-right .btn-primary {
+  background: var(--ems-navy);
+  border: none;
+  color: var(--ems-white);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 11px 16px;
+  transition: background 0.15s ease;
+}
+
+.login-btn:hover, .auth-right .btn-primary:hover {
+  background: var(--ems-navy-light);
+}
+
+.register-text, .register-link {
+  font-size: 13.5px;
+}
+
+.register-link {
+  color: var(--ems-amber-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }

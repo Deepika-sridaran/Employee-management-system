@@ -1,0 +1,102 @@
+/* ===== Navbar ===== */
+.app-navbar {
+  background: var(--ems-navy);
+  color: var(--ems-white);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-navbar img {
+  width: 34px;
+  height: 34px;
+}
+
+.app-navbar h2 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ===== Sidebar ===== */
+.app-sidebar {
+  width: 240px;
+  min-height: calc(100vh - 108px); /* leaves room for navbar + footer */
+  background: var(--ems-navy);
+  color: var(--ems-white);
+  padding: 24px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-sidebar h3 {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 8px 16px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 14.5px;
+  margin-bottom: 4px;
+  transition: background 0.15s ease;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ems-white);
+}
+
+.sidebar-link.active {
+  background: var(--ems-amber);
+  color: var(--ems-navy);
+  font-weight: 600;
+}
+
+.sidebar-logout {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-logout button {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--ems-white);
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sidebar-logout button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Layout shell ===== */
+.app-body {
+  display: flex;
+}
+
+.app-content {
+  flex: 1;
+  padding: 0;
+}
+
+/* ===== Footer ===== */
+.app-footer {
+  background: var(--ems-navy-light);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 12px 28px;
+  font-size: 13px;
+  text-align: center;
+}

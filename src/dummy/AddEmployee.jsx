@@ -1,133 +1,146 @@
-import {useState} from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createEmployee, getAllDepartments } from "../services/employeeServices.js";
 
 function AddEmployee() {
-    const [name, setName] = useState("");
+    const [userId, setUserId] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [department, setDepartment] = useState("");
-    const [password, setPassword] = useState("");
+    const [departmentId, setDepartmentId] = useState("");
     const [designation, setDesignation] = useState("");
+    const [departments, setDepartments] = useState([]);
+    const [salary, setSalary] = useState("");
+    const [address, setAddress] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    function handleSubmit(e) {
+    const navigate = useNavigate();
 
+    useEffect(() => {getAllDepartments().then(setDepartments).catch(console.error);}, []);
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        if(name === ""){
-            alert("Please enter employee name");
-            return;
-        }
-        if(email === ""){
-            alert("Please enter employee email");
-            return;
-        }
-        if(phone === ""){
-            alert("Please enter employee phone");
-            return;
-        }
-        if(department === ""){
-            alert("Please select department");
-            return;
-        }
-        if(password === ""){
-            alert("Please enter password");
-            return;
-        }
-        if(designation === ""){
-            alert("Please select designation");
+        if (!userId || !firstName || !lastName || !email) {
+            alert("User ID, First Name, Last Name, and Email are required");
             return;
         }
 
-        alert(
-            "Employee added successfully!\n\n" +
-            "Name: " + name + "\n" +
-            "Email: " + email + "\n" +
-            "Phone: " + phone + "\n" +
-            "Department: " + department + "\n" +
-            "Designation: " + designation
-        );
-        setName("");
-        setEmail("");
-        setPhone("");
-        setDepartment("");
-        setPassword("");
-        setDesignation("");
+        setLoading(true);
+        try {
+            await createEmployee({
+            user_id: Number(userId),
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone: phone || undefined,
+            department_id: departmentId ? Number(departmentId) : undefined,
+            designation: designation || undefined,
+            salary: salary ? Number(salary) : undefined,
+            address: address || undefined,});
+            alert("Employee added successfully!");
+            navigate("/employee-list");
+        } catch (error) {
+            alert(error.message || "Failed to add employee");
+        } finally {
+            setLoading(false);
+        }
     }
+
     return (
         <div>
             <h1>Add Employee</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Name:</label>
-                    <br/>
-
+                    <label>User ID (must already be registered):</label><br />
                     <input
-                        type="text"
-                        placeholder="Enter employee name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        type="number"
+                        placeholder="e.g. 1 (check users table in Workbench)"
+                        value={userId}
+                        onChange={(e) => setUserId(e.target.value)}
                     />
                 </div>
-                <br/>
-                <input
-                    type="email"
-                    placeholder="Enter employee email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <br/>
+                <br />
                 <div>
-                    <label>Phone</label>
-                    <br/>
+                    <label>First Name:</label><br />
                     <input
                         type="text"
-                        placeholder="Enter employee phone"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                </div>
+                <br />
+                <div>
+                    <label>Last Name:</label><br />
+                    <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+                </div>
+                <br />
+                <div>
+                    <label>Email:</label><br />
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <br />
+                <div>
+                    <label>Phone (exactly 10 digits):</label><br />
+                    <input
+                        type="text"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        />
-                </div>
-                <br/>
-                <div>
-                    <label>Password</label>
-                    <br/>
-                    <input
-                        type="password"
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <br/>
+                <br />
                 <div>
-                    <label>Designation</label>
-                    <br/>
+                    <label>Designation:</label><br />
                     <input
                         type="text"
-                        placeholder="Enter designation"
                         value={designation}
                         onChange={(e) => setDesignation(e.target.value)}
                     />
-                    </div>
-                <br/>
-                <div>
-                    <label>Department</label>
-                    <br/>
-                    <select
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
-                        >
-                    <option value="">Select Department</option>
-                        <option value="IT">IT</option>
-                        <option value="HR">HR</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Testing">Testing</option>
-                    </select>
                 </div>
-                <br/>
-                <button type="submit">Add Employee</button>
+                <br />
+                <div>
+                <label>Salary:</label><br />
+                <input
+                    type="number"
+                    step="0.01"
+                    placeholder="e.g. 45000"
+                    value={salary}
+                    onChange={(e) => setSalary(e.target.value)}
+                />
+                </div>
+                <br />
+                <div>
+                <label>Address:</label><br />
+                <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                />
+                </div>
+                <br />
+                <select value={departmentId} onChange={(e) => setDepartmentId(e.target.value)}>
+                <option value="">Select Department</option>
+                    {departments.map((d) => (
+                <option key={d.department_id} value={d.department_id}>
+                    {d.department_name}
+                </option>))}
+                </select>
+                <br />
+                <button type="submit" disabled={loading}>
+                    {loading ? "Adding…" : "Add Employee"}
+                </button>
             </form>
         </div>
     );
 }
+
 export default AddEmployee;
