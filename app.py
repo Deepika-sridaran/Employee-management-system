@@ -9,7 +9,7 @@ from routes.auth import auth_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.employee_routes import employee_bp
 from routes.profile_routes import profile_bp
-
+from routes.leave_routes import leave_bp
 
 def create_app():
     app = Flask(__name__)
@@ -28,6 +28,7 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(leave_bp)
     app.register_blueprint(employee_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(profile_bp)

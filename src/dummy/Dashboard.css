@@ -137,3 +137,151 @@
 .approved-status { background: #E4F5EF; color: #1E7A61; }
 .pending-status { background: #FDF1DE; color: var(--ems-amber-dark); }
 .rejected-status { background: #FBE7E7; color: #A32E2E; }
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calendar-nav button {
+  background: var(--ems-mist);
+  border: 1px solid var(--ems-border);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ems-navy);
+}
+
+.calendar-nav button:hover {
+  background: var(--ems-border);
+}
+
+.calendar-dates .holiday-date {
+  position: relative;
+  color: var(--ems-red);
+  font-weight: 600;
+}
+
+.calendar-dates .holiday-date::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ems-red);
+}
+
+.calendar-dates .today.holiday-date {
+  background: var(--ems-amber);
+  color: var(--ems-navy);
+}
+
+.calendar-dates span {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.calendar-dates span:empty {
+  cursor: default;
+}
+
+.calendar-dates span:not(:empty):hover {
+  background: var(--ems-border);
+}
+
+.calendar-dates .selected-date {
+  outline: 2px solid var(--ems-navy);
+  outline-offset: -1px;
+  font-weight: 700;
+}
+
+.upcoming-holidays {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ems-border);
+}
+
+.upcoming-holidays-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ems-slate-soft);
+  margin-bottom: 10px;
+}
+
+.holiday-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 6px 0;
+}
+
+.holiday-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ems-red);
+  flex-shrink: 0;
+}
+
+.holiday-name {
+  flex: 1;
+  color: var(--ems-slate);
+}
+
+.holiday-date-label {
+  color: var(--ems-slate-soft);
+  font-size: 12px;
+}
+
+.selected-date-panel {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--ems-mist);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.selected-date-panel strong {
+  color: var(--ems-navy);
+  font-size: 13.5px;
+}
+
+.holiday-tag {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--ems-red);
+}
+
+.no-holiday-tag {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--ems-slate-soft);
+}
+
+.selected-date-panel button {
+  background: var(--ems-navy);
+  color: var(--ems-white);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.selected-date-panel button:hover {
+  background: var(--ems-navy-light);
+}
