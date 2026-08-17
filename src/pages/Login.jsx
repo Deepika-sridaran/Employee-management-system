@@ -1,50 +1,19 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Form, Button, InputGroup, Alert, Row, Col } from 'react-bootstrap'
 import '../App.css'
 
 function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [loading, setLoading] = useState(false)
 
-  const navigate = useNavigate()
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     setError('')
     setSuccess('')
-    setLoading(true)
-
-    try {
-      const response = await fetch('http://127.0.0.1:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Invalid email or password')
-      }
-
-      // Save the token + user so other pages (Dashboard, employeeServices.js)
-      // can send it back on every future request.
-      localStorage.setItem('token', data.access_token)
-      localStorage.setItem('user', JSON.stringify(data.user))
-
-      setSuccess('Login successful! Redirecting to dashboard...')
-      setTimeout(() => navigate('/dashboard'), 800)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
+    setSuccess('Login successful! Redirecting to dashboard...')
   }
 
   return (
@@ -53,7 +22,7 @@ function Login() {
         <Row className="justify-content-center">
           <Col lg={10} xl={9}>
             <div className="auth-container d-flex bg-white shadow rounded-4 overflow-hidden">
-
+              
               {/* ========== Left Side ========== */}
               <div className="auth-left d-none d-md-flex flex-column justify-content-between text-white p-5">
                 <div className="text-center">
@@ -70,6 +39,7 @@ function Login() {
                   </p>
                 </div>
 
+                {/* Icon Illustration */}
                 <div className="text-center mt-4">
                   <div className="illustration-box mx-auto d-flex align-items-center justify-content-center">
                     <i className="bi bi-laptop"></i>
@@ -101,36 +71,28 @@ function Login() {
 
                   <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                      <Form.Label htmlFor="loginEmail" className="fw-semibold">Email Address</Form.Label>
+                      <Form.Label className="fw-semibold">Email Address</Form.Label>
                       <InputGroup>
                         <InputGroup.Text className="bg-white">
                           <i className="bi bi-envelope"></i>
                         </InputGroup.Text>
                         <Form.Control
-                          id="loginEmail"
-                          name="email"
                           type="email"
                           placeholder="Enter your email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
                           required
                         />
                       </InputGroup>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                      <Form.Label htmlFor="loginPassword" className="fw-semibold">Password</Form.Label>
+                      <Form.Label className="fw-semibold">Password</Form.Label>
                       <InputGroup>
                         <InputGroup.Text className="bg-white">
                           <i className="bi bi-lock"></i>
                         </InputGroup.Text>
                         <Form.Control
-                          id="loginPassword"
-                          name="password"
                           type={showPassword ? 'text' : 'password'}
                           placeholder="Enter your password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
                           required
                         />
                         <InputGroup.Text
@@ -163,9 +125,8 @@ function Login() {
                       type="submit"
                       variant="primary"
                       className="w-100 py-2 fw-semibold mb-3"
-                      disabled={loading}
                     >
-                      {loading ? 'Signing in…' : 'Login'}
+                      Login
                     </Button>
 
                     <div className="d-flex align-items-center my-3">
@@ -191,7 +152,7 @@ function Login() {
           </Col>
         </Row>
       </div>
-    </div>
+    </div>  
   )
 }
 
