@@ -5,12 +5,17 @@ import "./MainLayout.css";
 
 function MainLayout({ children }) {
   return (
-    <div>
+    <div className="main-layout">
       <Navbar />
+
       <div className="app-body">
         <Sidebar />
-        <div className="app-content">{children}</div>
+
+        <div className="app-content">
+          {children}
+        </div>
       </div>
+
       <Footer />
     </div>
   );

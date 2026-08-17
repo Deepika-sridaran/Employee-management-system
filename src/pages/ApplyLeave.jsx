@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 import { applyLeave } from "../services/leaveServices.js";
-import { useLocation } from "react-router-dom";
+
 
 function ApplyLeave() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [leaveType, setLeaveType] = useState("");
     const [startDate, setStartDate] = useState(location.state?.prefillDate || "");
     const [endDate, setEndDate] = useState("");
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
+   
 
     async function handleSubmit(e) {
         e.preventDefault();

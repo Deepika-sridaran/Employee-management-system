@@ -1,5 +1,7 @@
-.dashboard {
-  padding: 28px 32px;
+ .dashboard {
+  width: 100%;
+  min-height: 100%;
+  padding: 28px 32px 40px;
 }
 
 .dashboard-header {
@@ -28,7 +30,8 @@
   color: var(--ems-navy);
 }
 
-.dashboard-grid, .dashboard-bottom-grid {
+.dashboard-grid, 
+.dashboard-bottom-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
@@ -57,7 +60,7 @@
 }
 
 /* Calendar card */
-.calendar-month { font-weight: 600; margin-bottom: 10px; color: var(--ems-navy); }
+.calendar-month { font-weight: 450; margin-bottom: 10px; color: var(--ems-navy); }
 .calendar-days, .calendar-dates {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -70,7 +73,7 @@
 .calendar-dates .today {
   background: var(--ems-amber);
   color: var(--ems-navy);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 /* Holiday card */
@@ -116,7 +119,17 @@
 .employee-stats strong { color: var(--ems-navy); }
 
 /* Recent leaves table */
-.recent-leaves table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+
+.recent-leaves{
+  width: 100;
+  margin-bottom: 30px;
+}
+.recent-leaves table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  font-size: 13.5px; 
+}
+
 .recent-leaves th {
   text-align: left;
   color: var(--ems-slate-soft);
@@ -126,7 +139,11 @@
   padding: 10px 8px;
   border-bottom: 1px solid var(--ems-border);
 }
-.recent-leaves td { padding: 12px 8px; border-bottom: 1px solid var(--ems-border); }
+
+.recent-leaves td { 
+  padding: 12px 8px; 
+  border-bottom: 1px 
+  solid var(--ems-border); }
 
 .status {
   padding: 3px 10px;
@@ -284,4 +301,48 @@
 
 .selected-date-panel button:hover {
   background: var(--ems-navy-light);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 450px) {
+  .dashboard {
+    padding: 20px;
+  }
+
+  .dashboard-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-nav strong {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 500px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .calendar-days, .calendar-dates {
+    font-size: 11px;
+    gap: 2px;
+  }
+
+  .recent-leaves table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .selected-date-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .selected-date-panel button {
+    width: 100%;
+  }
 }

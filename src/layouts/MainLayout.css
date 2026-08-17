@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .app-navbar img {
@@ -22,7 +23,9 @@
 /* ===== Sidebar ===== */
 .app-sidebar {
   width: 240px;
-  min-height: calc(100vh - 108px); /* leaves room for navbar + footer */
+  min-height: 0; /* leaves room for navbar + footer */
+  height: 100%;
+  flex-shrink: 0;
   background: var(--ems-navy);
   color: var(--ems-white);
   padding: 24px 16px;
@@ -83,13 +86,29 @@
 }
 
 /* ===== Layout shell ===== */
-.app-body {
+.main-layout {
+  height: 100vh;
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .app-content {
   flex: 1;
+  min-width: 0;
+  min-height: 0;
   padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ===== Footer ===== */
@@ -99,4 +118,64 @@
   padding: 12px 28px;
   font-size: 13px;
   text-align: center;
+  flex-shrink: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .app-sidebar {
+    width: 200px;
+    padding: 20px 12px;
+  }
+
+  .app-content {
+    padding: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-body {
+    flex-direction: column;
+  }
+
+  .app-sidebar {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+  }
+
+  .app-sidebar h3 {
+    display: none;
+  }
+
+  .sidebar-link {
+    padding: 6px 10px;
+    font-size: 13px;
+    margin-bottom: 0;
+  }
+
+  .sidebar-logout {
+    margin-top: 0;
+    margin-left: auto;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .sidebar-logout button {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .app-navbar {
+    padding: 12px 16px;
+  }
+
+  .app-navbar h2 {
+    font-size: 15px;
+  }
 }
