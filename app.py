@@ -10,6 +10,7 @@ from routes.dashboard_routes import dashboard_bp
 from routes.employee_routes import employee_bp
 from routes.profile_routes import profile_bp
 from routes.leave_routes import leave_bp
+from routes.photo_routes import photo_bp
 
 def create_app():
     app = Flask(__name__)
@@ -33,6 +34,7 @@ def create_app():
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(profile_bp)
     app.register_blueprint(department_bp)
+    app.register_blueprint(photo_bp)
 
     @app.route("/")
     def home():

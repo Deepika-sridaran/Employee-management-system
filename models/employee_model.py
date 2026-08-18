@@ -15,7 +15,6 @@ class Employee(db.Model):
     designation = db.Column(db.String(100), nullable=True)
     salary = db.Column(db.Numeric(12, 2), nullable=True)
     address = db.Column(db.String(255), nullable=True)
-    profile_image = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
     def to_dict(self):

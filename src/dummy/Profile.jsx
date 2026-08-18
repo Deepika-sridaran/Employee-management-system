@@ -18,6 +18,9 @@ function Profile() {
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [photoPreview, setPhotoPreview] = useState(null);
+    const [photoFile, setPhotoFile] = useState(null);
+    const [uploadingPhoto, setUploadingPhoto] = useState(null);
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -50,6 +53,13 @@ function Profile() {
         setIsEditing(true);
     }
 
+    function handlePhotoChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    setPhotoFile(file);
+    setPhotoPreview(URL.createObjectURL(file));
+    }
+
     async function handleSave() {
         setSaving(true);
         setError("");
@@ -79,6 +89,40 @@ function Profile() {
         }
     }
 
+    async function handlePhotoUpload() {
+    if (!photoFile) {
+        alert("Choose a photo first");
+        return;
+    }
+    setUploadingPhoto(true);
+    try {
+        const formData = new FormData();
+        formData.append("photo", photoFile);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://127.0.0.1:5000/profile/photo", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: formData,
+        });
+        const body = await response.json();
+        if (!response.ok) {
+            throw new Error(body.message || "Failed to upload photo");
+        }
+
+        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+        storedUser.profile_image = body.profile_image;
+        localStorage.setItem("user", JSON.stringify(storedUser));
+
+        alert("Profile photo updated!");
+        setPhotoFile(null);
+    } catch (error) {
+        alert(error.message);
+    } finally {
+        setUploadingPhoto(false);
+    }
+    }
+
     if (loading) return <div>Loading profile…</div>;
     if (error && !isEditing) return <div style={{ color: "red" }}>{error}</div>;
 
@@ -87,6 +131,22 @@ function Profile() {
             <h1>My Profile</h1>
             <h2>Employee Details</h2>
 
+            <div style={{ marginBottom: "20px" }}>
+    <img
+        src={
+            photoPreview ||
+            (JSON.parse(localStorage.getItem("user") || "{}").profile_image
+                ? `http://127.0.0.1:5000/uploads/${JSON.parse(localStorage.getItem("user")).profile_image}`
+                : "https://via.placeholder.com/120?text=No+Photo")
+        }
+        alt="Profile"
+        style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", display: "block", marginBottom: "10px" }}
+    />
+    <input type="file" accept="image/png, image/jpeg" onChange={handlePhotoChange} />
+    <button onClick={handlePhotoUpload} disabled={uploadingPhoto || !photoFile} style={{ marginLeft: "10px" }}>
+        {uploadingPhoto ? "Uploading…" : "Upload Photo"}
+    </button>
+    </div>
             <div>
                 <label>First Name</label><br />
                 <input type="text" value={firstName} disabled={!isEditing} onChange={(e) => setFirstName(e.target.value)} />

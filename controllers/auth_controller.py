@@ -100,7 +100,8 @@ def login():
             "user_id": user.user_id,
             "full_name": user.full_name,
             "email": user.email,
-            "role": user.role
+            "role": user.role,
+            "profile_image": user.profile_image
         }
     }), 200
 
