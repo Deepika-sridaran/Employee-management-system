@@ -36,6 +36,7 @@ function MyLeaves() {
                                 <th>End Date</th>
                                 <th>Reason</th>
                                 <th>Status</th>
+                                <th>Admin Notes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,10 +47,13 @@ function MyLeaves() {
                                     <td>{leave.end_date}</td>
                                     <td>{leave.reason || "—"}</td>
                                     <td>
-                                        <span style={{ ...statusStyle(leave.status), padding: "3px 10px", borderRadius: "999px", fontSize: "12px", fontWeight: 600 }}>
+                                        <span style={{ ...statusStyle(leave.status), 
+                                            padding: "3px 10px", borderRadius: "999px", 
+                                            fontSize: "12px", fontWeight: 600 }}>
                                             {leave.status}
                                         </span>
                                     </td>
+                                    <td>{leave.status === "Rejected" ? leave.rejection_reason : "-"}</td>
                                 </tr>
                             ))}
                         </tbody>

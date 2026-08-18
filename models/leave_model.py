@@ -12,6 +12,7 @@ class Leave(db.Model):
     end_date = db.Column(db.Date, nullable=False)
     reason = db.Column(db.String(500), nullable=True)
     status = db.Column(db.String(20), nullable=False, default="Pending")
+    rejection_reason = db.Column(db.String(500), nullable=True)
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -23,5 +24,6 @@ class Leave(db.Model):
             "end_date": self.end_date.isoformat() if self.end_date else None,
             "reason": self.reason,
             "status": self.status,
+            "rejection_reason": self.rejection_reason,
             "applied_at": self.applied_at.isoformat() if self.applied_at else None,
         }

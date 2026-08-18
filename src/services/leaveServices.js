@@ -43,10 +43,11 @@ export async function approveLeave(id) {
   return handleResponse(response);
 }
 
-export async function rejectLeave(id) {
+export async function rejectLeave(id, reason) {
   const response = await fetch(`${API_URL}/${id}/reject`, {
     method: "PUT",
     headers: authHeaders(),
+    body: JSON.stringify({reason}),
   });
   return handleResponse(response);
 }

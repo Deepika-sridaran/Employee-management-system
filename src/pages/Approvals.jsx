@@ -27,8 +27,14 @@ function Approvals() {
     }
 
     async function handleReject(id) {
+        const reason = window.prompt("Enter a Reason for Rejecting this Leave Request: ")
+        if (reason === null)
+            return;
+        if (!reason.trim()){
+            alert("A Reason is Required to Reject a Leave Request.")
+        }
         try {
-            await rejectLeave(id);
+            await rejectLeave(id, reason.trim());
             loadLeaves();
         } catch (error) {
             alert(error.message);
