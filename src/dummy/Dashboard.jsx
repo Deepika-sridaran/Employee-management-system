@@ -63,7 +63,8 @@ function Dashboard() {
                 {error && <p style={{ color: "red" }}>{error}</p>}
 
                 <CalendarCard/>
-                {isAdmin && (
+                {/* {!isAdmin && <LeaveUsageCard />} */}
+                    {isAdmin &&(
                     <div className="dashboard-bottom-grid">
                         <div className="dashboard-card employee-summary">
                             <div className="card-header"><h3>👥 EMPLOYEE SUMMARY</h3></div>

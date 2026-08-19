@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 import { applyLeave } from "../services/leaveServices.js";
+import LeaveUsageCard from "../components/LeaveUsageCard.jsx";
 
 
 function ApplyLeave() {
@@ -44,6 +45,7 @@ function ApplyLeave() {
         <MainLayout>
             <div style={{ padding: "20px" }}>
                 <h1>Apply for Leave</h1>
+                <LeaveUsageCard/>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label>Leave Type</label><br />
