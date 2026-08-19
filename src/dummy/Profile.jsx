@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getProfileExtras, saveProfileExtras } from "../data/profileExtras.js";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
@@ -21,6 +22,10 @@ function Profile() {
     const [photoPreview, setPhotoPreview] = useState(null);
     const [photoFile, setPhotoFile] = useState(null);
     const [uploadingPhoto, setUploadingPhoto] = useState(null);
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [gender, setGender] = useState("");
+    const [dateOfJoining, setDateOfJoining] = useState("");
+    const [employeeStatus, setEmployeeStatus] = useState("Active");
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -33,6 +38,8 @@ function Profile() {
                 if (!response.ok) {
                     throw new Error(body.message || "Failed to load profile");
                 }
+                const user = JSON.parse(localStorage.getItem("user") || "{}");
+                const extras = getProfileExtras(user.user_id);
                 const employee = body.data;
                 setFirstName(employee.first_name || "");
                 setLastName(employee.last_name || "");
@@ -40,6 +47,10 @@ function Profile() {
                 setPhone(employee.phone || "");
                 setAddress(employee.address || "");
                 setDesignation(employee.designation || "");
+                setDateOfBirth(extras.dateOfBirth);
+                setGender(extras.gender);
+                setDateOfJoining(extras.dateOfJoining);
+                setEmployeeStatus(extras.employeeStatus);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -61,6 +72,8 @@ function Profile() {
     }
 
     async function handleSave() {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        saveProfileExtras(user.user_id, { dateOfBirth, gender, dateOfJoining, employeeStatus });
         setSaving(true);
         setError("");
         try {
@@ -173,6 +186,37 @@ function Profile() {
             </div>
             <br />
             <div>
+                <label>Date of Birth</label><br />
+                <input type="date" value={dateOfBirth} disabled={!isEditing} onChange={(e) => setDateOfBirth(e.target.value)} />
+            </div>
+            <br />
+            <div>
+                <label>Gender</label><br />
+                <select value={gender} disabled={!isEditing} onChange={(e) => setGender(e.target.value)}>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                </select>
+            </div>
+            <br />
+            <div>
+                <label>Date of Joining</label><br />
+                <input type="date" value={dateOfJoining} disabled={!isEditing} onChange={(e) => setDateOfJoining(e.target.value)} />
+            </div>
+            <br />
+            <div>
+                <label>Employee Status</label><br />
+                <select value={employeeStatus} disabled={!isEditing} onChange={(e) => setEmployeeStatus(e.target.value)}>
+                <option value="Active">Active</option>
+                <option value="Resigned">Resigned</option>
+                <option value="Terminated">Terminated</option>
+            </select>
+            </div>
+            <br />
+                {/* TODO: once backend adds these columns to users/employees, replace
+                    getProfileExtras/saveProfileExtras with real GET/PUT /profile fields */}
+            <div>
                 <label>Designation (read-only)</label><br />
                 <input type="text" value={designation} disabled />
             </div>
@@ -188,5 +232,4 @@ function Profile() {
         </div>
     );
 }
-
 export default Profile;

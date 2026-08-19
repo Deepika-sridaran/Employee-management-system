@@ -4,6 +4,8 @@ import MainLayout from "../layouts/MainLayout.jsx";
 import { getMyLeaves, getAllLeaves } from "../services/leaveServices.js";
 import "./Dashboard.css";
 import CalendarCard from "../components/CalendarCard.jsx";
+import { getTodayRecord } from "../data/attendanceStore.js";
+import { getPayroll, calculateNetPay } from "../data/payrollStore.js";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
@@ -21,6 +23,9 @@ function Dashboard() {
     const [recentLeaves, setRecentLeaves] = useState([]);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    const todayAttendance = !isAdmin ? getTodayRecord(user.user_id) : null;
+    const payrollSummary = !isAdmin ? calculateNetPay(getPayroll(user.user_id)) : null;
 
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const isAdmin = user?.role === "Admin";
@@ -98,6 +103,22 @@ function Dashboard() {
                         </div>
                     </div>
                 )}
+                {!isAdmin && (
+    <div className="dashboard-bottom-grid" style={{ marginBottom: "20px" }}>
+        <div className="dashboard-card">
+            <div className="card-header"><h3>🕐 TODAY'S ATTENDANCE</h3></div>
+            {todayAttendance ? (
+                <p>Checked in at {todayAttendance.checkIn}{todayAttendance.isLate ? " (Late)" : ""}</p>
+            ) : (
+                <p>Not checked in yet</p>
+            )}
+        </div>
+        <div className="dashboard-card">
+            <div className="card-header"><h3>💰 THIS MONTH'S NET PAY</h3></div>
+            <p style={{ fontSize: "24px", fontWeight: "700" }}>{payrollSummary.net.toFixed(2)}</p>
+        </div>
+    </div>
+)}
 
                 <div className="dashboard-card recent-leaves">
                     <div className="card-header">

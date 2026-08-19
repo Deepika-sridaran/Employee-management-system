@@ -23,6 +23,9 @@ function Sidebar() {
       {isAdmin && <NavLink to="/approvals" className={linkClass}>Approvals</NavLink>}
       <NavLink to="/employee-list" className={linkClass}>Employee List</NavLink>
       <NavLink to="/add-employee" className={linkClass}>Add Employee</NavLink>
+      <NavLink to="/attendance" className={linkClass}>Attendance</NavLink>
+      <NavLink to="/payroll" className={linkClass}>Payroll</NavLink>
+      <NavLink to="/departments" className={linkClass}>Departments</NavLink>
       <NavLink to="/profile" className={linkClass}>Profile</NavLink>
 
       <div className="sidebar-logout">

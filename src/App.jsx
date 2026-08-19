@@ -11,6 +11,9 @@ import EditEmployee from './dummy/EditEmployee.jsx';
 import ApplyLeave from "./pages/ApplyLeave.jsx";
 import MyLeaves from "./pages/MyLeaves.jsx";
 import Approvals from "./pages/Approvals.jsx";
+import Attendance from "./pages/Attendance.jsx";
+import Payroll from "./pages/Payroll.jsx";
+import Departments from './pages/Departments.jsx';
 
 function App() {
   return (
@@ -28,7 +31,9 @@ function App() {
       <Route path="/my-leaves" element={<MyLeaves />} />
       <Route path="/approvals" element={<Approvals />} />
       <Route path="*" element={<NotFound />} />
-   
+      <Route path="/attendance" element={<Attendance />} />
+      <Route path="/payroll" element={<Payroll />} />
+      <Route path="/departments" element={<Departments />} />
     </Routes>
   );
 }
