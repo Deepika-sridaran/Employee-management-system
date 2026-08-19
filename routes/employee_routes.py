@@ -4,6 +4,7 @@ from controllers.employee_controller import (
     create_employee,
     delete_employee,
     get_all_employees,
+    get_employee,
     update_employee,
     upload_profile_image
 )
@@ -17,6 +18,12 @@ employee_bp = Blueprint("employee_bp", __name__)
 @admin_required()
 def employees():
     return get_all_employees()
+
+
+@employee_bp.route("/employees/<int:employee_id>", methods=["GET"])
+@admin_required()
+def employee(employee_id):
+    return get_employee(employee_id)
 
 
 @employee_bp.route("/employees", methods=["POST"])

@@ -345,3 +345,25 @@ def upload_profile_image(employee_id):
             "message": "Failed to upload profile image",
             "error": str(error)
         }, 500
+def get_employee(employee_id):
+    try:
+        employee = db.session.get(Employee, employee_id)
+
+        if not employee:
+            return {
+                "success": False,
+                "message": "Employee not found"
+            }, 404
+
+        return {
+            "success": True,
+            "message": "Employee retrieved successfully",
+            "data": employee.to_dict()
+        }, 200
+
+    except Exception as error:
+        return {
+            "success": False,
+            "message": "Failed to retrieve employee",
+            "error": str(error)
+        }, 500
