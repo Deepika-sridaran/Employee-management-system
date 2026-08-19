@@ -24,7 +24,7 @@ function CalendarCard() {
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
   const todayStr = today.toISOString().split("T")[0];
-  const upcomingHolidays = getUpcomingHolidays(3);
+  const upcomingHolidays = getUpcomingHolidays(5);
 
   function goToPrevMonth() {
     if (viewMonth === 0) {
