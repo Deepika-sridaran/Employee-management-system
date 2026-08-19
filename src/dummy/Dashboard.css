@@ -70,8 +70,25 @@
   font-size: 13px;
   max-width: 100%;
 }
-.calendar-days span { color: var(--ems-slate-soft); font-weight: 600; }
-.calendar-dates span { padding: 6px 0; border-radius: 6px; }
+.calendar-days span { 
+  color: var(--ems-slate-soft); 
+  font-weight: 600; 
+}
+
+.calendar-dates .past-date {
+  color: var(--ems-border);
+  cursor: not-allowed;
+}
+
+.calendar-dates .past-date:hover {
+  background: transparent;
+}
+
+.calendar-dates span { 
+  padding: 6px 0; 
+  border-radius: 6px; 
+}
+
 .calendar-dates .today {
   background: var(--ems-amber);
   color: var(--ems-navy);

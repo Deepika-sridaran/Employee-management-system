@@ -45,6 +45,8 @@ function CalendarCard() {
   }
 
   function handleDateClick(dateStr) {
+    if (dateStr < todayStr)
+      return;
     setSelectedDate(dateStr === selectedDate ? null : dateStr);
   }
 
@@ -75,6 +77,7 @@ function CalendarCard() {
           {days.map((day) => {
             const dateStr = formatDateStr(viewYear, viewMonth, day);
             const isToday = dateStr === todayStr;
+            const isPast = dateStr < todayStr;
             const isSelected = dateStr === selectedDate;
             const holiday = getHolidayForDate(dateStr);
             return (
@@ -84,6 +87,7 @@ function CalendarCard() {
                 className={[
                   isToday ? "today" : "",
                   holiday ? "holiday-date" : "",
+                  isPast ? "past-date" : "",
                   isSelected ? "selected-date" : "",
                 ].join(" ").trim()}
                 title={holiday ? holiday.name : ""}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllEmployees, deleteEmployee } from "../services/employeeServices.js";
+import MainLayout from "../layouts/MainLayout.jsx";
 
 function EmployeeList() {
     const navigate = useNavigate();
@@ -33,9 +34,12 @@ function EmployeeList() {
     }
 
     return (
-        <div>
-            <h1>Employee List</h1>
-            <table border="1" cellPadding="10">
+        <MainLayout>
+            <div style={{ padding: "20px"}}>
+    <div style={{ padding: "20px" }}>
+        <h1>Employee List</h1>
+        <div style={{ overflowX: "auto" }}>
+            <table border="1" cellPadding="10" style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -59,9 +63,7 @@ function EmployeeList() {
                             <td>{employee.designation}</td>
                             <td>{employee.address}</td>
                             <td>
-                                <button
-                                    onClick={() => navigate(`/edit-employee/${employee.employee_id}`)}
-                                >
+                                <button onClick={() => navigate(`/edit-employee/${employee.employee_id}`)}>
                                     Edit
                                 </button>
                                 <button onClick={() => handleDelete(employee.employee_id)}>
@@ -73,7 +75,9 @@ function EmployeeList() {
                 </tbody>
             </table>
         </div>
-    );
+        </div>
+    </div>
+        </MainLayout>
+  );
 }
-
 export default EmployeeList;
