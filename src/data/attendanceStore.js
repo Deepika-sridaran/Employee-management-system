@@ -25,10 +25,9 @@ export function checkIn(userId, userName) {
     const timeStr = now.toTimeString().slice(0, 5);
 
     const existing = records.find((r) => r.userId === userId && r.date === today);
-    if (existing)
-        return existing;
+    if (existing) return existing;
 
-    const isLate = timeStr > "10.00";
+    const isLate = timeStr > "09:30";
 
     const record = {
         userId,
@@ -48,15 +47,14 @@ export function checkIn(userId, userName) {
 export function checkOut(userId) {
     const records = getAll();
     const today = getTodayStr();
-    const record = records.find((r) => r.userId === userId && r.Date === today);
-    if (!record || record.checkOut)
-        return record;
+    const record = records.find((r) => r.userId === userId && r.date === today); // fixed: was r.Date
+    if (!record || record.checkOut) return record;
 
     const now = new Date();
     const timeStr = now.toTimeString().slice(0, 5);
     record.checkOut = timeStr;
 
-    record.isEarlyLogout= timeStr < "18.00";
+    record.isEarlyLogout = timeStr < "18:00";
 
     const [inH, inM] = record.checkIn.split(":").map(Number);
     const [outH, outM] = timeStr.split(":").map(Number);
@@ -68,13 +66,16 @@ export function checkOut(userId) {
 }
 
 export function getAllRecordsForUser(userId) {
-    return getAll().filter((r) => r.userId === userId).sort((a, b) => b.date.localeCompare(a.Date));
+    return getAll()
+        .filter((r) => r.userId === userId)
+        .sort((a, b) => b.date.localeCompare(a.date)); // fixed: was a.Date
 }
 
 export function getAllRecordsForToday() {
     const today = getTodayStr();
-    return getAll.filter((r) => r.date === today);
+    return getAll().filter((r) => r.date === today);
 }
+
 // Cycle: "calendar" = 1st–end of month, "custom" = 21st–20th
 export function getMonthlyTotals(userId, cycleType = "calendar") {
     const records = getAllRecordsForUser(userId);
@@ -82,7 +83,6 @@ export function getMonthlyTotals(userId, cycleType = "calendar") {
 
     let start, end;
     if (cycleType === "custom") {
-        // 21st of previous/current month to 20th of current/next month
         if (now.getDate() >= 21) {
             start = new Date(now.getFullYear(), now.getMonth(), 21);
             end = new Date(now.getFullYear(), now.getMonth() + 1, 20);
@@ -100,15 +100,14 @@ export function getMonthlyTotals(userId, cycleType = "calendar") {
         return d >= start && d <= end;
     });
 
-    return{
-        daysPresent: inRange.lenght,
+    return {
+        daysPresent: inRange.length, // fixed: was .lenght
         totalHours: inRange.reduce((sum, r) => sum + (Number(r.totalHours) || 0), 0).toFixed(1),
-        lateCount: inRange.filter((r) => r.isLate).lenght,
-        earlyLogoutCount: inRange.filter((r) => r.isEarlyLogout).lenght,
+        lateCount: inRange.filter((r) => r.isLate).length, // fixed: was .lenght
+        earlyLogoutCount: inRange.filter((r) => r.isEarlyLogout).length, // fixed: was .lenght
     };
 }
 
-// Permission management: monthly limit
 const PERMISSION_MONTHLY_LIMIT_HOURS = 4;
 const PERMISSION_KEY = "ems_permissions";
 
@@ -122,7 +121,7 @@ export function requestPermission(userId, date, hours, reason) {
     const raw = localStorage.getItem(PERMISSION_KEY);
     const all = raw ? JSON.parse(raw) : {};
     const list = all[userId] || [];
-    list.push({ date, hours: Number(hours), reason});
+    list.push({ date, hours: Number(hours), reason });
     all[userId] = list;
     localStorage.setItem(PERMISSION_KEY, JSON.stringify(all));
 }

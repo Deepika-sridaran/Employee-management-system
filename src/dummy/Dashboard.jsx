@@ -24,11 +24,11 @@ function Dashboard() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const todayAttendance = !isAdmin ? getTodayRecord(user.user_id) : null;
-    const payrollSummary = !isAdmin ? calculateNetPay(getPayroll(user.user_id)) : null;
-
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const isAdmin = user?.role === "Admin";
+
+    const todayAttendance = !isAdmin ? getTodayRecord(user.user_id) : null;
+    const payrollSummary = !isAdmin ? calculateNetPay(getPayroll(user.user_id)) : null;
 
     useEffect(() => {
         const token = localStorage.getItem("token");

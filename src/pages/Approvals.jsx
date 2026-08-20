@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import MainLayout from "../layouts/MainLayout.jsx";
 import { getAllLeaves, approveLeave, rejectLeave } from "../services/leaveServices.js";
 
+function statusBadgeClass(status) {
+    if (status === "Approved") return "active";
+    if (status === "Rejected") return "danger";
+    return "warning";
+}
+
 function Approvals() {
     const [leaves, setLeaves] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -27,11 +33,11 @@ function Approvals() {
     }
 
     async function handleReject(id) {
-        const reason = window.prompt("Enter a Reason for Rejecting this Leave Request: ")
-        if (reason === null)
+        const reason = window.prompt("Enter a reason for rejecting this leave request:");
+        if (reason === null) return;
+        if (!reason.trim()) {
+            alert("A reason is required to reject a leave request.");
             return;
-        if (!reason.trim()){
-            alert("A Reason is Required to Reject a Leave Request.")
         }
         try {
             await rejectLeave(id, reason.trim());
@@ -43,47 +49,51 @@ function Approvals() {
 
     return (
         <MainLayout>
-            <div style={{ padding: "20px" }}>
-                <h1>Leave Approvals</h1>
-                {loading ? (
-                    <p>Loading…</p>
-                ) : leaves.length === 0 ? (
-                    <p>No leave requests yet.</p>
-                ) : (
-                    <table border="1" cellPadding="10" style={{ width: "100%" }}>
-                        <thead>
-                            <tr>
-                                <th>Employee</th>
-                                <th>Type</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {leaves.map((leave) => (
-                                <tr key={leave.leave_id}>
-                                    <td>{leave.employee_name}</td>
-                                    <td>{leave.leave_type}</td>
-                                    <td>{leave.start_date}</td>
-                                    <td>{leave.end_date}</td>
-                                    <td>{leave.status}</td>
-                                    <td>
-                                        {leave.status === "Pending" ? (
-                                            <>
-                                                <button onClick={() => handleApprove(leave.leave_id)}>Approve</button>
-                                                <button onClick={() => handleReject(leave.leave_id)}>Reject</button>
-                                            </>
-                                        ) : (
-                                            "—"
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+            <div className="page-container">
+                <div className="page-header">
+                    <h1>Leave Approvals</h1>
+                    <p>Review and act on pending leave requests</p>
+                </div>
+
+                <div className="ui-card">
+                    {loading ? (
+                        <div className="ui-empty">Loading…</div>
+                    ) : leaves.length === 0 ? (
+                        <div className="ui-empty">No leave requests yet.</div>
+                    ) : (
+                        <div className="ui-table-wrap">
+                            <table className="ui-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th><th>Type</th><th>Start Date</th>
+                                        <th>End Date</th><th>Status</th><th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {leaves.map((leave) => (
+                                        <tr key={leave.leave_id}>
+                                            <td>{leave.employee_name}</td>
+                                            <td>{leave.leave_type}</td>
+                                            <td>{leave.start_date}</td>
+                                            <td>{leave.end_date}</td>
+                                            <td><span className={`ui-badge ${statusBadgeClass(leave.status)}`}>{leave.status}</span></td>
+                                            <td>
+                                                {leave.status === "Pending" ? (
+                                                    <>
+                                                        <button className="btn btn-primary btn-sm" onClick={() => handleApprove(leave.leave_id)}>Approve</button>{" "}
+                                                        <button className="btn btn-danger btn-sm" onClick={() => handleReject(leave.leave_id)}>Reject</button>
+                                                    </>
+                                                ) : (
+                                                    "—"
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
             </div>
         </MainLayout>
     );

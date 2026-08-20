@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllEmployees, deleteEmployee } from "../services/employeeServices.js";
 import MainLayout from "../layouts/MainLayout.jsx";
+import { getAllEmployees, deleteEmployee } from "../services/employeeServices.js";
 
 function EmployeeList() {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ function EmployeeList() {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Department ID</th>
+                        <th>Department</th>
                         <th>Designation</th>
                         <th>Address</th>
                         <th>Actions</th>

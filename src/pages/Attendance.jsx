@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MainLayout from "../layouts/MainLayout.jsx";
 import {
     getTodayRecord, checkIn, checkOut, getAllRecordsForUser,
@@ -10,24 +10,25 @@ function Attendance() {
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const isAdmin = user?.role === "Admin";
 
-    const [today, setToday] = useState(null);
-    const [myRecords, setMyRecords] = useState([]);
-    const [allToday, setAllToday] = useState([]);
     const [cycleType, setCycleType] = useState("calendar");
-    const [monthly, setMonthly] = useState(null);
+    const [today, setToday] = useState(() => getTodayRecord(user.user_id));
+    const [myRecords, setMyRecords] = useState(() => getAllRecordsForUser(user.user_id));
+    const [allToday, setAllToday] = useState(() => isAdmin ? getAllRecordsForToday() : []);
+    const [monthly, setMonthly] = useState(() => getMonthlyTotals(user.user_id, "calendar"));
     const [permHours, setPermHours] = useState("");
     const [permDate, setPermDate] = useState("");
     const [permReason, setPermReason] = useState("");
-    const [usedPermHours, setUsedPermHours] = useState(0);
-
-     useEffect(refresh, [cycleType]);
+    const [usedPermHours, setUsedPermHours] = useState(() => getUsedPermissionHours(user.user_id));
 
     function refresh() {
         setToday(getTodayRecord(user.user_id));
         setMyRecords(getAllRecordsForUser(user.user_id));
         setMonthly(getMonthlyTotals(user.user_id, cycleType));
         setUsedPermHours(getUsedPermissionHours(user.user_id));
-        if (isAdmin) setAllToday(getAllRecordsForToday());
+
+        if (isAdmin) {
+            setAllToday(getAllRecordsForToday());
+        }
     }
 
     function handleCheckIn() {
@@ -55,39 +56,51 @@ function Attendance() {
         refresh();
     }
 
+    const rows = isAdmin ? allToday : myRecords;
+
     return (
         <MainLayout>
-            <div style={{ padding: "20px" }}>
-                <h1>Attendance</h1>
-                <p style={{ color: "#888", fontSize: "13px" }}>
-                    ⚠️ Demo data stored locally in your browser — will connect to the real backend once it's ready.
-                </p>
+            <div className="page-container">
+                <div className="page-header">
+                    <h1>Attendance</h1>
+                </div>
 
                 {!isAdmin && (
-                    <div className="dashboard-card" style={{ marginBottom: "20px" }}>
-                        <h3>Today — {new Date().toDateString()}</h3>
+                    <div className="ui-card">
+                        <h3 style={{ marginTop: 0, color: "var(--ems-navy)" }}>Today — {new Date().toDateString()}</h3>
                         {today ? (
                             <div>
-                                <p>Check-in: <strong>{today.checkIn}</strong> {today.isLate && <span style={{ color: "red" }}>(Late)</span>}</p>
-                                <p>Check-out: <strong>{today.checkOut || "Not checked out yet"}</strong> {today.isEarlyLogout && <span style={{ color: "orange" }}>(Early)</span>}</p>
+                                <p>Check-in: <strong>{today.checkIn}</strong> {today.isLate && <span className="ui-badge danger">Late</span>}</p>
+                                <p>Check-out: <strong>{today.checkOut || "Not checked out yet"}</strong> {today.isEarlyLogout && <span className="ui-badge warning">Early</span>}</p>
                                 {today.totalHours && <p>Total hours: <strong>{today.totalHours}</strong></p>}
-                                {!today.checkOut && <button onClick={handleCheckOut}>Check Out</button>}
+                                {!today.checkOut && <button className="btn btn-primary" onClick={handleCheckOut}>Check Out</button>}
                             </div>
                         ) : (
-                            <button onClick={handleCheckIn}>Check In</button>
+                            <button className="btn btn-amber" onClick={handleCheckIn}>Check In</button>
                         )}
                     </div>
                 )}
 
-                <div className="dashboard-card" style={{ marginBottom: "20px" }}>
-                    <h3>Monthly Summary</h3>
-                    <label>Attendance Cycle: </label>
-                    <select value={cycleType} onChange={(e) => setCycleType(e.target.value)}>
+                <div className="ui-card">
+                    <h3 style={{ marginTop: 0, color: "var(--ems-navy)" }}>Monthly Summary</h3>
+                    <div className="field-group" style={{ maxWidth: "280px" }}>
+                        <label>Attendance Cycle</label>
+                        <select
+                        value={cycleType}
+                        onChange={(e) => {
+                        const newCycleType = e.target.value;
+                        setCycleType(newCycleType);
+                        setMonthly(
+                        getMonthlyTotals(user.user_id, newCycleType)
+                        );
+                    }}
+                        >
                         <option value="calendar">1st – End of Month</option>
                         <option value="custom">21st – 20th</option>
                     </select>
+                    </div>
                     {monthly && (
-                        <div style={{ marginTop: "12px" }}>
+                        <div className="form-grid" style={{ marginTop: "8px" }}>
                             <p>Days present: <strong>{monthly.daysPresent}</strong></p>
                             <p>Total hours: <strong>{monthly.totalHours}</strong></p>
                             <p>Late arrivals: <strong>{monthly.lateCount}</strong></p>
@@ -96,42 +109,61 @@ function Attendance() {
                     )}
                 </div>
 
-                <div className="dashboard-card" style={{ marginBottom: "20px" }}>
-                    <h3>Permission Management</h3>
+                <div className="ui-card">
+                    <h3 style={{ marginTop: 0, color: "var(--ems-navy)" }}>Permission Management</h3>
                     <p>Used this month: <strong>{usedPermHours}</strong> / {PERMISSION_LIMIT} hours</p>
-                    <form onSubmit={handlePermissionRequest}>
-                        <input type="date" value={permDate} onChange={(e) => setPermDate(e.target.value)} />
-                        <input type="number" step="0.5" placeholder="Hours" value={permHours} onChange={(e) => setPermHours(e.target.value)} style={{ width: "80px", marginLeft: "8px" }} />
-                        <input type="text" placeholder="Reason" value={permReason} onChange={(e) => setPermReason(e.target.value)} style={{ marginLeft: "8px" }} />
-                        <button type="submit" style={{ marginLeft: "8px" }}>Request</button>
+                    <form onSubmit={handlePermissionRequest} className="form-grid">
+                        <div className="field-group">
+                            <label>Date</label>
+                            <input type="date" value={permDate} onChange={(e) => setPermDate(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Hours</label>
+                            <input type="number" step="0.5" value={permHours} onChange={(e) => setPermHours(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Reason</label>
+                            <input type="text" value={permReason} onChange={(e) => setPermReason(e.target.value)} />
+                        </div>
+                        <div style={{ alignSelf: "end", marginBottom: "16px" }}>
+                            <button type="submit" className="btn btn-primary">Request</button>
+                        </div>
                     </form>
                 </div>
 
-                <div className="dashboard-card">
-                    <h3>{isAdmin ? "Today — All Employees" : "My Attendance History"}</h3>
-                    <table border="1" cellPadding="8" style={{ width: "100%" }}>
-                        <thead>
-                            <tr>
-                                {isAdmin && <th>Employee</th>}
-                                <th>Date</th><th>Check-in</th><th>Check-out</th><th>Hours</th><th>Flags</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {(isAdmin ? allToday : myRecords).map((r, i) => (
-                                <tr key={i}>
-                                    {isAdmin && <td>{r.userName}</td>}
-                                    <td>{r.date}</td>
-                                    <td>{r.checkIn}</td>
-                                    <td>{r.checkOut || "—"}</td>
-                                    <td>{r.totalHours || "—"}</td>
-                                    <td>
-                                        {r.isLate && <span style={{ color: "red" }}>Late </span>}
-                                        {r.isEarlyLogout && <span style={{ color: "orange" }}>Early</span>}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="ui-card">
+                    <h3 style={{ marginTop: 0, color: "var(--ems-navy)" }}>
+                        {isAdmin ? "Today — All Employees" : "My Attendance History"}
+                    </h3>
+                    {rows.length === 0 ? (
+                        <div className="ui-empty">No attendance records yet.</div>
+                    ) : (
+                        <div className="ui-table-wrap">
+                            <table className="ui-table">
+                                <thead>
+                                    <tr>
+                                        {isAdmin && <th>Employee</th>}
+                                        <th>Date</th><th>Check-in</th><th>Check-out</th><th>Hours</th><th>Flags</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rows.map((r, i) => (
+                                        <tr key={i}>
+                                            {isAdmin && <td>{r.userName}</td>}
+                                            <td>{r.date}</td>
+                                            <td>{r.checkIn}</td>
+                                            <td>{r.checkOut || "—"}</td>
+                                            <td>{r.totalHours || "—"}</td>
+                                            <td>
+                                                {r.isLate && <span className="ui-badge danger">Late</span>}{" "}
+                                                {r.isEarlyLogout && <span className="ui-badge warning">Early</span>}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
         </MainLayout>

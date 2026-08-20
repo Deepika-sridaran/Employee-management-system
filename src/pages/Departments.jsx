@@ -11,19 +11,31 @@ function Departments() {
 
     return (
         <MainLayout>
-            <div style={{ padding: "20px" }}>
-                <h1>Departments</h1>
-                <table border="1" cellPadding="10" style={{ width: "100%" }}>
-                    <thead><tr><th>ID</th><th>Name</th></tr></thead>
-                    <tbody>
-                        {departments.map((d) => (
-                            <tr key={d.department_id}>
-                                <td>{d.department_id}</td>
-                                <td>{d.department_name}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="page-container">
+                <div className="page-header">
+                    <h1>Departments</h1>
+                    <p>{departments.length} department{departments.length !== 1 ? "s" : ""}</p>
+                </div>
+
+                <div className="ui-card">
+                    {departments.length === 0 ? (
+                        <div className="ui-empty">No departments found.</div>
+                    ) : (
+                        <div className="ui-table-wrap">
+                            <table className="ui-table">
+                                <thead><tr><th>ID</th><th>Name</th></tr></thead>
+                                <tbody>
+                                    {departments.map((d) => (
+                                        <tr key={d.department_id}>
+                                            <td>{d.department_id}</td>
+                                            <td>{d.department_name}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
             </div>
         </MainLayout>
     );
