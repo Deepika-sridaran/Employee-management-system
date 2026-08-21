@@ -11,13 +11,16 @@ from routes.profile_routes import profile_bp
 from routes.attendance_routes import attendance_bp
 from routes.permission_routes import permission_bp
 
-
+from routes.department_routes import department_bp
+from routes.leave_routes import leave_bp
+from routes.photo_routes import photo_bp
+from routes.payroll_routes import payroll_bp
 
 
 def create_app():
     app = Flask(__name__)
 
-    # Load config
+    # Load configuration
     app.config.from_object(Config)
 
     # Initialize extensions
@@ -26,19 +29,34 @@ def create_app():
     jwt.init_app(app)
     mail.init_app(app)
 
-    # Enable CORS
+    # Enable frontend access
     CORS(app)
 
-    # Register routes
-    app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    # Authentication
+    app.register_blueprint(
+        auth_bp,
+        url_prefix="/api/auth"
+    )
+
+    # Employee management
     app.register_blueprint(employee_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(profile_bp)
+
+    # Attendance and permission
     app.register_blueprint(attendance_bp)
     app.register_blueprint(permission_bp)
-   
 
-    # Home route
+    # Other team modules
+    app.register_blueprint(department_bp)
+    app.register_blueprint(leave_bp)
+    app.register_blueprint(photo_bp)
+
+    app.register_blueprint(
+        payroll_bp,
+        url_prefix="/api/payroll"
+    )
+
     @app.route("/")
     def home():
         return {
@@ -46,11 +64,12 @@ def create_app():
             "message": "Employee Management System API is running"
         }, 200
 
-    # Database test route
     @app.route("/database-test")
     def database_test():
         try:
-            db.session.execute(db.text("SELECT 1"))
+            db.session.execute(
+                db.text("SELECT 1")
+            )
 
             return {
                 "success": True,

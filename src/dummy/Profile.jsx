@@ -1,3 +1,4 @@
+import MainLayout from "../layouts/MainLayout.jsx";
 import { useState, useEffect } from "react";
 import { getProfileExtras, saveProfileExtras } from "../data/profileExtras.js";
 
@@ -140,7 +141,8 @@ function Profile() {
     if (error && !isEditing) return <div style={{ color: "red" }}>{error}</div>;
 
     return (
-        <div>
+        <MainLayout>
+        <div style={{padding: "20px"}}>
             <h1>My Profile</h1>
             <h2>Employee Details</h2>
 
@@ -230,6 +232,7 @@ function Profile() {
                 </button>
             )}
         </div>
+    </MainLayout>
     );
 }
 export default Profile;

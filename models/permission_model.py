@@ -6,7 +6,8 @@ class Permission(db.Model):
 
     permission_id = db.Column(
         db.Integer,
-        primary_key=True
+        primary_key=True,
+        autoincrement=True
     )
 
     employee_id = db.Column(
@@ -41,7 +42,11 @@ class Permission(db.Model):
     )
 
     status = db.Column(
-        db.Enum("Pending", "Approved", "Rejected"),
+        db.Enum(
+            "Pending",
+            "Approved",
+            "Rejected"
+        ),
         nullable=False,
         default="Pending"
     )
@@ -53,7 +58,8 @@ class Permission(db.Model):
 
     created_at = db.Column(
         db.DateTime,
-        server_default=db.func.current_timestamp()
+        server_default=db.func.current_timestamp(),
+        nullable=False
     )
 
     def to_dict(self):
@@ -62,25 +68,30 @@ class Permission(db.Model):
             "employee_id": self.employee_id,
             "permission_date": (
                 self.permission_date.isoformat()
-                if self.permission_date else None
+                if self.permission_date
+                else None
             ),
             "start_time": (
                 self.start_time.strftime("%H:%M:%S")
-                if self.start_time else None
+                if self.start_time
+                else None
             ),
             "end_time": (
                 self.end_time.strftime("%H:%M:%S")
-                if self.end_time else None
+                if self.end_time
+                else None
             ),
             "total_hours": (
                 float(self.total_hours)
-                if self.total_hours is not None else 0.0
+                if self.total_hours is not None
+                else 0.0
             ),
             "reason": self.reason,
             "status": self.status,
             "approved_by": self.approved_by,
             "created_at": (
                 self.created_at.isoformat()
-                if self.created_at else None
+                if self.created_at
+                else None
             )
         }

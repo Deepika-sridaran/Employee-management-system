@@ -21,8 +21,8 @@ function Sidebar() {
       <NavLink to="/apply-leave" className={linkClass}>Apply Leave</NavLink>
       <NavLink to="/my-leaves" className={linkClass}>My Leaves</NavLink>
       {isAdmin && <NavLink to="/approvals" className={linkClass}>Approvals</NavLink>}
-      <NavLink to="/employee-list" className={linkClass}>Employee List</NavLink>
-      <NavLink to="/add-employee" className={linkClass}>Add Employee</NavLink>
+      {isAdmin && <NavLink to="/employee-list" className={linkClass}>Employee List</NavLink>}
+      {isAdmin && <NavLink to="/add-employee" className={linkClass}>Add Employee</NavLink>}
       <NavLink to="/attendance" className={linkClass}>Attendance</NavLink>
       <NavLink to="/payroll" className={linkClass}>Payroll</NavLink>
       <NavLink to="/departments" className={linkClass}>Departments</NavLink>

@@ -1,7 +1,7 @@
 from datetime import datetime, date
 import calendar
 
-from flask import request
+from flask import request, jsonify
 from flask_jwt_extended import get_jwt_identity, get_jwt
 
 from extensions import db
@@ -11,6 +11,10 @@ from models.permission_model import Permission
 
 MONTHLY_PERMISSION_LIMIT = 4.0
 
+
+# =========================================================
+# EMPLOYEE - REQUEST PERMISSION
+# =========================================================
 
 def request_permission():
     try:
@@ -157,6 +161,10 @@ def request_permission():
         }, 500
 
 
+# =========================================================
+# EMPLOYEE - OWN PERMISSIONS
+# =========================================================
+
 def get_my_permissions():
     try:
         user_id = int(get_jwt_identity())
@@ -194,6 +202,10 @@ def get_my_permissions():
         }, 500
 
 
+# =========================================================
+# ADMIN - ALL PERMISSIONS
+# =========================================================
+
 def get_all_permissions():
     try:
         permissions = Permission.query.order_by(
@@ -216,6 +228,10 @@ def get_all_permissions():
             "error": str(error)
         }, 500
 
+
+# =========================================================
+# ADMIN - APPROVE
+# =========================================================
 
 def approve_permission(permission_id):
     try:
@@ -261,6 +277,10 @@ def approve_permission(permission_id):
         }, 500
 
 
+# =========================================================
+# ADMIN - REJECT
+# =========================================================
+
 def reject_permission(permission_id):
     try:
         claims = get_jwt()
@@ -304,6 +324,10 @@ def reject_permission(permission_id):
             "error": str(error)
         }, 500
 
+
+# =========================================================
+# EMPLOYEE - MONTHLY SUMMARY
+# =========================================================
 
 def get_monthly_permission_summary():
     try:
@@ -373,3 +397,106 @@ def get_monthly_permission_summary():
             "message": "Failed to retrieve monthly permission summary",
             "error": str(error)
         }, 500
+
+
+# =========================================================
+# EXISTING TEAM APIs
+# Kept for compatibility with frontend/team implementation
+# =========================================================
+
+def create_permission():
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({
+                "message": "Request body is required"
+            }), 400
+
+        permission = Permission(
+            employee_id=data.get("employee_id"),
+            permission_date=data.get("permission_date"),
+            start_time=data.get("start_time"),
+            end_time=data.get("end_time"),
+            total_hours=data.get("total_hours"),
+            reason=data.get("reason")
+        )
+
+        db.session.add(permission)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Permission request created successfully",
+            "permission": permission.to_dict()
+        }), 201
+
+    except Exception as error:
+        db.session.rollback()
+
+        return jsonify({
+            "error": str(error)
+        }), 500
+
+
+def get_permissions():
+    permissions = Permission.query.all()
+
+    return jsonify([
+        permission.to_dict()
+        for permission in permissions
+    ]), 200
+
+
+def get_permissions_by_employee(employee_id):
+    permissions = Permission.query.filter_by(
+        employee_id=employee_id
+    ).all()
+
+    return jsonify([
+        permission.to_dict()
+        for permission in permissions
+    ]), 200
+
+
+def update_permission_status(permission_id):
+    try:
+        data = request.get_json()
+
+        permission = db.session.get(
+            Permission,
+            permission_id
+        )
+
+        if not permission:
+            return jsonify({
+                "message": "Permission not found"
+            }), 404
+
+        status = data.get("status")
+
+        if status not in [
+            "Approved",
+            "Rejected"
+        ]:
+            return jsonify({
+                "message": "Status must be Approved or Rejected"
+            }), 400
+
+        permission.status = status
+        permission.approved_by = data.get(
+            "approved_by"
+        )
+
+        db.session.commit()
+
+        return jsonify({
+            "message": f"Permission {status.lower()} successfully",
+            "permission": permission.to_dict()
+        }), 200
+
+    except Exception as error:
+        db.session.rollback()
+
+        return jsonify({
+            "error": str(error)
+        }), 500

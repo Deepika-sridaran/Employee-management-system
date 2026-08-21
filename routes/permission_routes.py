@@ -3,11 +3,15 @@ from flask_jwt_extended import get_jwt, jwt_required
 
 from controllers.permission_controller import (
     approve_permission,
+    create_permission,
     get_all_permissions,
     get_monthly_permission_summary,
     get_my_permissions,
+    get_permissions,
+    get_permissions_by_employee,
     reject_permission,
-    request_permission
+    request_permission,
+    update_permission_status
 )
 
 
@@ -16,6 +20,10 @@ permission_bp = Blueprint(
     __name__
 )
 
+
+# =========================================================
+# YOUR JWT-BASED PERMISSION APIs
+# =========================================================
 
 @permission_bp.route(
     "/permissions/request",
@@ -77,3 +85,39 @@ def approve_permission_route(permission_id):
 @jwt_required()
 def reject_permission_route(permission_id):
     return reject_permission(permission_id)
+
+
+# =========================================================
+# TEAM / FRONTEND-COMPATIBLE PERMISSION APIs
+# =========================================================
+
+@permission_bp.route(
+    "/api/permissions/",
+    methods=["POST"]
+)
+def create_permission_route():
+    return create_permission()
+
+
+@permission_bp.route(
+    "/api/permissions/",
+    methods=["GET"]
+)
+def get_permissions_route():
+    return get_permissions()
+
+
+@permission_bp.route(
+    "/api/permissions/employee/<int:employee_id>",
+    methods=["GET"]
+)
+def get_permissions_by_employee_route(employee_id):
+    return get_permissions_by_employee(employee_id)
+
+
+@permission_bp.route(
+    "/api/permissions/<int:permission_id>/status",
+    methods=["PUT"]
+)
+def update_permission_status_route(permission_id):
+    return update_permission_status(permission_id)

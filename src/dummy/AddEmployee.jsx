@@ -1,3 +1,4 @@
+import MainLayout from "../layouts/MainLayout.jsx";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createEmployee, getAllDepartments } from "../services/employeeServices.js";
@@ -49,10 +50,17 @@ function AddEmployee() {
     }
 
     return (
-        <div>
-            <h1>Add Employee</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
+        <MainLayout>
+        <div className="page-container">
+            <div className="page-header">
+                <h1>Add Employee</h1>
+                <p>Create a new employee profile</p>
+            </div>
+
+            <div className="ui-card" style={{ maxWidth: "700px" }}>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-grid"></div>
+                        <div className="field-group">
                     <label>User ID (must already be registered):</label><br />
                     <input
                         type="number"
@@ -139,7 +147,9 @@ function AddEmployee() {
                     {loading ? "Adding…" : "Add Employee"}
                 </button>
             </form>
-        </div>
+            </div>
+            </div>
+        </MainLayout>
     );
 }
 
