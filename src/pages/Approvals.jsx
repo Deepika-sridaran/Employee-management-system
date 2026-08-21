@@ -72,7 +72,9 @@ function Approvals() {
                                 <tbody>
                                     {leaves.map((leave) => (
                                         <tr key={leave.leave_id}>
-                                            <td>{leave.employee_name}</td>
+                                            <td>{leave.employee_name} 
+                                                <span style={{ color: "var(--ems-slate-soft)", fontSize: "12px" }}>
+                                                    (ID: {leave.employee_id})</span></td>
                                             <td>{leave.leave_type}</td>
                                             <td>{leave.start_date}</td>
                                             <td>{leave.end_date}</td>

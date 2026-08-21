@@ -10,16 +10,19 @@
 }
 
 .page-header h1 {
-    font-family: var(--ems-font-display);
-    color: var(--ems-navy);
-    font-size: 26px;
-    margin: 0 0 4px;
+  font-family: var(--ems-font-display);
+  color: var(--ems-navy);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
 }
 
 .page-header p {
-    color: var(--ems-slate-soft);
-    font-size: 13.5px;
-    margin: 0;
+  color: var(--ems-slate);
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
 }
 
 /* ===== Card ===== */
@@ -216,4 +219,25 @@
 .ui-badge.danger { 
     background: #FBE7E7; 
     color: #A32E2E; 
+}
+
+/* ===== Page background variants ===== */
+.page-bg-dashboard {
+  background: linear-gradient(180deg, #EEF3FB 0%, var(--ems-mist) 320px);
+}
+.page-bg-money {
+  background: linear-gradient(180deg, #EAF7F1 0%, var(--ems-mist) 320px);
+}
+.page-bg-time {
+  background: linear-gradient(180deg, #FDF3E7 0%, var(--ems-mist) 320px);
+}
+.page-bg-people {
+  background: linear-gradient(180deg, #F2EEFB 0%, var(--ems-mist) 320px);
+}
+.page-bg-approvals {
+  background: linear-gradient(180deg, #FBEDEE 0%, var(--ems-mist) 320px);
+}
+
+.page-container {
+  min-height: calc(100vh - 108px);
 }

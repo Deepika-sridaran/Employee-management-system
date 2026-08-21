@@ -6,6 +6,7 @@ import "./Dashboard.css";
 import CalendarCard from "../components/CalendarCard.jsx";
 import { getTodayRecord } from "../data/attendanceStore.js";
 import { getPayroll, calculateNetPay } from "../data/payrollStore.js";
+import { Users, CalendarClock, CheckCircle2, XCircle, Clock, Wallet, ClipboardList } from "lucide-react";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
@@ -72,7 +73,9 @@ function Dashboard() {
                     {isAdmin &&(
                     <div className="dashboard-bottom-grid">
                         <div className="dashboard-card employee-summary">
-                            <div className="card-header"><h3>👥 EMPLOYEE SUMMARY</h3></div>
+                            <div className="card-header">
+                                <h3><span className="card-icon-badge navy"><Users size={16} /></span>
+                                EMPLOYEE SUMMARY</h3></div>
                             <div className="employee-stats">
                                 <div><span>Total Employees</span><strong>{stats ? stats.employees.total : "…"}</strong></div>
                                 <div><span>Total Departments</span><strong>{stats ? stats.departments.total : "…"}</strong></div>
@@ -81,7 +84,9 @@ function Dashboard() {
                         </div>
 
                         <div className="dashboard-card leave-summary">
-                            <div className="card-header"><h3>📊 LEAVE SUMMARY</h3></div>
+                            <div className="card-header">
+                                <h3><span className="card-icon-badge amber"><CalendarClock size={16} /></span>
+                                LEAVE SUMMARY</h3></div>
                             <div className="summary-container">
                                 <div className="summary-box">
                                 <span>Total</span>
@@ -92,12 +97,14 @@ function Dashboard() {
                                 <strong>{stats ? stats.leaves.pending : "…"}</strong>
                             </div>
                             <div className="summary-box approved">
-                                <span>Approved</span>
-                                <strong>{stats ? stats.leaves.approved : "…"}</strong>
+                            <span><CheckCircle2 size={12} style={{ verticalAlign: "-2px", 
+                                marginRight: "3px" }} />Approved</span>
+                            <strong>{stats ? stats.leaves.approved : "…"}</strong>
                             </div>
                             <div className="summary-box rejected">
-                                <span>Rejected</span>
-                                <strong>{stats ? stats.leaves.rejected : "…"}</strong>
+                            <span><XCircle size={12} style={{ verticalAlign: "-2px", 
+                                marginRight: "3px" }} />Rejected</span>
+                            <strong>{stats ? stats.leaves.rejected : "…"}</strong>
                             </div>
                             </div>
                         </div>
@@ -106,7 +113,8 @@ function Dashboard() {
                 {!isAdmin && (
     <div className="dashboard-bottom-grid" style={{ marginBottom: "20px" }}>
         <div className="dashboard-card">
-            <div className="card-header"><h3>🕐 TODAY'S ATTENDANCE</h3></div>
+            <div className="card-header"><h3><span className="card-icon-badge navy">
+                <Clock size={16} /></span>TODAY'S ATTENDANCE</h3></div>
             {todayAttendance ? (
                 <p>Checked in at {todayAttendance.checkIn}{todayAttendance.isLate ? " (Late)" : ""}</p>
             ) : (
@@ -114,15 +122,16 @@ function Dashboard() {
             )}
         </div>
         <div className="dashboard-card">
-            <div className="card-header"><h3>💰 THIS MONTH'S NET PAY</h3></div>
+            <div className="card-header"><h3><span className="card-icon-badge teal">
+                <Wallet size={16} /></span>THIS MONTH'S NET PAY</h3></div>
             <p style={{ fontSize: "24px", fontWeight: "700" }}>{payrollSummary.net.toFixed(2)}</p>
         </div>
     </div>
 )}
-
                 <div className="dashboard-card recent-leaves">
                     <div className="card-header">
-                        <h3>📋 {isAdmin ? "RECENT LEAVE REQUESTS" : "MY RECENT LEAVES"}</h3>
+                        <h3><span className="card-icon-badge navy">
+                            <ClipboardList size={16} /></span>{isAdmin ? "RECENT LEAVE REQUESTS" : "MY RECENT LEAVES"}</h3>
                     </div>
 
                     {recentLeaves.length === 0 ? (

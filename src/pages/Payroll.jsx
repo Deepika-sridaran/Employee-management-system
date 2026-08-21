@@ -40,10 +40,9 @@ function Payroll() {
 
     return (
         <MainLayout>
-            <div className="page-container">
+            <div className="page-container page-bg-money">
                 <div className="page-header">
                     <h1>Payroll</h1>
-                    <p>⚠️ Demo data stored locally in your browser — will connect to the real backend once it's ready.</p>
                 </div>
 
                 {isAdmin && (
