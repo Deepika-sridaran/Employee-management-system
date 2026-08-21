@@ -4,18 +4,20 @@ from flask_cors import CORS
 from config import Config
 from extensions import db, bcrypt, jwt, mail
 
-from routes.department_routes import department_bp
 from routes.auth import auth_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.employee_routes import employee_bp
 from routes.profile_routes import profile_bp
-from routes.leave_routes import leave_bp
-from routes.photo_routes import photo_bp
+from routes.attendance_routes import attendance_bp
+from routes.permission_routes import permission_bp
+
+
+
 
 def create_app():
     app = Flask(__name__)
 
-    # Load configuration
+    # Load config
     app.config.from_object(Config)
 
     # Initialize extensions
@@ -27,15 +29,16 @@ def create_app():
     # Enable CORS
     CORS(app)
 
-    # Register blueprints
+    # Register routes
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
-    app.register_blueprint(leave_bp)
     app.register_blueprint(employee_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(profile_bp)
-    app.register_blueprint(department_bp)
-    app.register_blueprint(photo_bp)
+    app.register_blueprint(attendance_bp)
+    app.register_blueprint(permission_bp)
+   
 
+    # Home route
     @app.route("/")
     def home():
         return {
@@ -43,6 +46,7 @@ def create_app():
             "message": "Employee Management System API is running"
         }, 200
 
+    # Database test route
     @app.route("/database-test")
     def database_test():
         try:
