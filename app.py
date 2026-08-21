@@ -11,23 +11,22 @@ from routes.employee_routes import employee_bp
 from routes.profile_routes import profile_bp
 from routes.leave_routes import leave_bp
 from routes.photo_routes import photo_bp
+from routes.payroll_routes import payroll_bp
+from routes.permission_routes import permission_bp
+
 
 def create_app():
     app = Flask(__name__)
 
-    # Load configuration
     app.config.from_object(Config)
 
-    # Initialize extensions
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
     mail.init_app(app)
 
-    # Enable CORS
     CORS(app)
 
-    # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(leave_bp)
     app.register_blueprint(employee_bp)
@@ -35,6 +34,8 @@ def create_app():
     app.register_blueprint(profile_bp)
     app.register_blueprint(department_bp)
     app.register_blueprint(photo_bp)
+    app.register_blueprint(payroll_bp, url_prefix="/api/payroll")
+    app.register_blueprint(permission_bp, url_prefix="/api/permissions")
 
     @app.route("/")
     def home():
