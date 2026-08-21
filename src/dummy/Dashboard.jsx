@@ -74,9 +74,9 @@ function Dashboard() {
                         <div className="dashboard-card employee-summary">
                             <div className="card-header"><h3>👥 EMPLOYEE SUMMARY</h3></div>
                             <div className="employee-stats">
-                                <div><span>Total Employees</span><strong>{stats ? stats.total_employees : "…"}</strong></div>
-                                <div><span>Total Departments</span><strong>{stats ? stats.total_departments : "…"}</strong></div>
-                                <div><span>Total Users</span><strong>{stats ? stats.total_users : "…"}</strong></div>
+                                <div><span>Total Employees</span><strong>{stats ? stats.employees.total : "…"}</strong></div>
+                                <div><span>Total Departments</span><strong>{stats ? stats.departments.total : "…"}</strong></div>
+                                <div><span>Total Users</span><strong>{stats ? stats.users.total : "…"}</strong></div>
                             </div>
                         </div>
 
@@ -84,21 +84,21 @@ function Dashboard() {
                             <div className="card-header"><h3>📊 LEAVE SUMMARY</h3></div>
                             <div className="summary-container">
                                 <div className="summary-box">
-                                    <span>Total</span>
-                                    <strong>{stats ? stats.total_leaves : "…"}</strong>
-                                </div>
+                                <span>Total</span>
+                                <strong>{stats ? stats.leaves.total : "…"}</strong>
+                            </div>
                                 <div className="summary-box pending">
-                                    <span>Pending</span>
-                                    <strong>{stats ? stats.pending_leaves : "…"}</strong>
-                                </div>
-                                <div className="summary-box approved">
-                                    <span>Approved</span>
-                                    <strong>{stats ? stats.approved_leaves : "…"}</strong>
-                                </div>
-                                <div className="summary-box rejected">
-                                    <span>Rejected</span>
-                                    <strong>{stats ? stats.rejected_leaves : "…"}</strong>
-                                </div>
+                                <span>Pending</span>
+                                <strong>{stats ? stats.leaves.pending : "…"}</strong>
+                            </div>
+                            <div className="summary-box approved">
+                                <span>Approved</span>
+                                <strong>{stats ? stats.leaves.approved : "…"}</strong>
+                            </div>
+                            <div className="summary-box rejected">
+                                <span>Rejected</span>
+                                <strong>{stats ? stats.leaves.rejected : "…"}</strong>
+                            </div>
                             </div>
                         </div>
                     </div>

@@ -9,6 +9,10 @@ class Employee(db.Model):
     user_id = db.Column(db.Integer, unique=True, nullable=False)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
+    date_of_birth = db.Column(db.Date, nullable=True)
+    gender = db.Column(db.Enum("Male", "Female", "Other"), nullable=True)
+    date_of_joining = db.Column(db.Date, nullable=True)
+    employee_status = db.Column(db.Enum("Active", "Resigned", "Terminated"), nullable=False, default="Active")
     email = db.Column(db.String(150), unique=True, nullable=False)
     phone = db.Column(db.String(20), nullable=True)
     department_id = db.Column(db.Integer, nullable=True)
@@ -24,6 +28,10 @@ class Employee(db.Model):
             "user_id": self.user_id,
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "date_of_birth": self.date_of_birth.isoformat() if self.date_of_birth else None,
+            "gender": self.gender,
+            "date_of_joining": self.date_of_joining.isoformat() if self.date_of_joining else None,
+            "employee_status": self.employee_status,
             "email": self.email,
             "phone": self.phone,
             "department_id": self.department_id,
@@ -32,4 +40,4 @@ class Employee(db.Model):
             "address": self.address,
             "profile_image": self.profile_image,
             "created_at": self.created_at.isoformat() if self.created_at else None
-        }
+        } 
