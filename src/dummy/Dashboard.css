@@ -2,6 +2,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 28px 32px;
+  background: linear-gradient(180deg, #EEF3FB 0%, var(--ems-mist) 320px);
 }
 
 .dashboard-header {
@@ -59,6 +60,20 @@
   color: var(--ems-navy);
   margin: 0;
 }
+
+.card-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  margin-right: 8px;
+}
+.card-icon-badge.navy { background: rgba(20, 33, 61, 0.1); color: var(--ems-navy); }
+.card-icon-badge.amber { background: rgba(242, 169, 59, 0.15); color: var(--ems-amber-dark); }
+.card-icon-badge.teal { background: rgba(46, 158, 131, 0.12); color: var(--ems-teal); }
+.card-icon-badge.red { background: rgba(214, 69, 69, 0.1); color: var(--ems-red); }
 
 /* Calendar card */
 .calendar-month { font-weight: 450; margin-bottom: 10px; color: var(--ems-navy); }
