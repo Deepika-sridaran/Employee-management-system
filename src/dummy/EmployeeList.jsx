@@ -40,7 +40,7 @@ function EmployeeList() {
     if (error) {
         return (
             <MainLayout>
-                <div className="page-container">
+                <div className="page-container page-bg-people">
                     <div className="ui-card" style={{ textAlign: "center", padding: "48px 24px" }}>
                         <div style={{ fontSize: "36px", marginBottom: "12px" }}>🔒</div>
                         <h2 style={{ color: "var(--ems-navy)", marginBottom: "8px" }}>Access Restricted</h2>

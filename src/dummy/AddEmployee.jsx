@@ -51,7 +51,7 @@ function AddEmployee() {
 
     return (
         <MainLayout>
-        <div className="page-container">
+        <div className="page-container page-bg-people">
             <div className="page-header">
                 <h1>Add Employee</h1>
                 <p>Create a new employee profile</p>

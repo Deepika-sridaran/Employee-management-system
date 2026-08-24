@@ -84,7 +84,7 @@ function EditEmployee() {
 
     return (
         <MainLayout>
-            <div className="page-container">
+            <div className="page-container page-bg-people">
                 <div className="page-header">
                     <h1>Edit Employee</h1>
                     <p>Update this employee's details</p>

@@ -8,30 +8,45 @@ function Departments() {
     const [expandedDeptId, setExpandedDeptId] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const isAdmin = user?.role === "Admin";
+
     useEffect(() => {
-        Promise.all([getAllDepartments(), getAllEmployees()])
-            .then(([deptData, empData]) => {
-                setDepartments(deptData);
-                setEmployees(empData);
-            })
-            .catch(console.error)
-            .finally(() => setLoading(false));
-    }, []);
+        getAllDepartments()
+            .then(setDepartments)
+            .catch(console.error);
+
+        // Employee-level detail (counts, expandable rows) is admin-only data —
+        // employees just see the plain department list.
+        if (isAdmin) {
+            getAllEmployees()
+                .then(setEmployees)
+                .catch(console.error)
+                .finally(() => setLoading(false));
+        } else {
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- no second fetch needed for non-admins, safe to resolve loading immediately
+            setLoading(false);
+        }
+    }, [isAdmin]);
 
     function employeesInDepartment(departmentId) {
         return employees.filter((e) => e.department_id === departmentId);
     }
 
     function handleToggle(departmentId) {
+        if (!isAdmin) return;
         setExpandedDeptId(expandedDeptId === departmentId ? null : departmentId);
     }
 
     return (
         <MainLayout>
-            <div className="page-container">
+            <div className="page-container page-bg-people">
                 <div className="page-header">
                     <h1>Departments</h1>
-                    <p>{departments.length} department{departments.length !== 1 ? "s" : ""} — click one to see its employees</p>
+                    <p>
+                        {departments.length} department{departments.length !== 1 ? "s" : ""}
+                        {isAdmin ? " — click one to see its employees" : ""}
+                    </p>
                 </div>
 
                 <div className="ui-card">
@@ -46,27 +61,27 @@ function Departments() {
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Employee Count</th>
+                                        {isAdmin && <th>Employee Count</th>}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {departments.map((d) => {
-                                        const deptEmployees = employeesInDepartment(d.department_id);
+                                        const deptEmployees = isAdmin ? employeesInDepartment(d.department_id) : [];
                                         const isExpanded = expandedDeptId === d.department_id;
                                         return (
                                             <>
                                                 <tr
                                                     key={d.department_id}
                                                     onClick={() => handleToggle(d.department_id)}
-                                                    style={{ cursor: "pointer" }}
+                                                    style={{ cursor: isAdmin ? "pointer" : "default" }}
                                                 >
                                                     <td>{d.department_id}</td>
                                                     <td style={{ color: "var(--ems-navy)", fontWeight: 600 }}>
-                                                        {isExpanded ? "▾ " : "▸ "}{d.department_name}
+                                                        {isAdmin ? (isExpanded ? "▾ " : "▸ ") : ""}{d.department_name}
                                                     </td>
-                                                    <td>{deptEmployees.length}</td>
+                                                    {isAdmin && <td>{deptEmployees.length}</td>}
                                                 </tr>
-                                                {isExpanded && (
+                                                {isAdmin && isExpanded && (
                                                     <tr key={`${d.department_id}-detail`}>
                                                         <td colSpan="3" style={{ background: "var(--ems-mist)", padding: "16px" }}>
                                                             {deptEmployees.length === 0 ? (
@@ -110,4 +125,5 @@ function Departments() {
         </MainLayout>
     );
 }
+
 export default Departments;

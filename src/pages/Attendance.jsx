@@ -60,7 +60,7 @@ function Attendance() {
 
     return (
         <MainLayout>
-            <div className="page-container">
+            <div className="page-container page-bg-time">
                 <div className="page-header">
                     <h1>Attendance</h1>
                 </div>

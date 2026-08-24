@@ -49,7 +49,7 @@ function Approvals() {
 
     return (
         <MainLayout>
-            <div className="page-container">
+            <div className="page-container page-bg-approvals">
                 <div className="page-header">
                     <h1>Leave Approvals</h1>
                     <p>Review and act on pending leave requests</p>

@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 import { applyLeave } from "../services/leaveServices.js";
 import LeaveUsageCard from "../components/LeaveUsageCard.jsx";
-
 
 function ApplyLeave() {
     const navigate = useNavigate();
@@ -15,7 +13,6 @@ function ApplyLeave() {
     const [endDate, setEndDate] = useState("");
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(false);
-   
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -43,39 +40,43 @@ function ApplyLeave() {
 
     return (
         <MainLayout>
-            <div style={{ padding: "20px" }}>
-                <h1>Apply for Leave</h1>
-                <LeaveUsageCard/>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>Leave Type</label><br />
-                        <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)}>
-                            <option value="">Select Leave Type</option>
-                            <option value="Sick Leave">Sick Leave</option>
-                            <option value="Casual Leave">Casual Leave</option>
-                            <option value="Earned Leave">Earned Leave</option>
-                        </select>
-                    </div>
-                    <br />
-                    <div>
-                        <label>Start Date</label><br />
-                        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-                    </div>
-                    <br />
-                    <div>
-                        <label>End Date</label><br />
-                        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-                    </div>
-                    <br />
-                    <div>
-                        <label>Reason</label><br />
-                        <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3} />
-                    </div>
-                    <br />
-                    <button type="submit" disabled={loading}>
-                        {loading ? "Submitting…" : "Apply for Leave"}
-                    </button>
-                </form>
+            <div className="page-container page-bg-approvals">
+                <div className="page-header">
+                    <h1>Apply for Leave</h1>
+                    <p>Submit a new leave request</p>
+                </div>
+
+                <LeaveUsageCard />
+
+                <div className="ui-card" style={{ maxWidth: "600px" }}>
+                    <form onSubmit={handleSubmit}>
+                        <div className="field-group">
+                            <label>Leave Type</label>
+                            <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)}>
+                                <option value="">Select Leave Type</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Casual Leave">Casual Leave</option>
+                                <option value="Earned Leave">Earned Leave</option>
+                            </select>
+                        </div>
+                        <div className="field-group">
+                            <label>Start Date</label>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>End Date</label>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Reason</label>
+                            <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3} />
+                        </div>
+
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
+                            {loading ? "Submitting…" : "Apply for Leave"}
+                        </button>
+                    </form>
+                </div>
             </div>
         </MainLayout>
     );

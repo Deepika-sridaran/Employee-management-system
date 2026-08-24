@@ -21,7 +21,7 @@ function MyLeaves() {
 
     return (
         <MainLayout>
-            <div className="page-container">
+            <div className="page-container page-bg-approvals">
                 <div className="page-header">
                     <h1>My Leave Requests</h1>
                     <p>Track the status of everything you've applied for</p>

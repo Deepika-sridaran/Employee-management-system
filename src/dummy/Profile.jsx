@@ -22,7 +22,7 @@ function Profile() {
     const [saving, setSaving] = useState(false);
     const [photoPreview, setPhotoPreview] = useState(null);
     const [photoFile, setPhotoFile] = useState(null);
-    const [uploadingPhoto, setUploadingPhoto] = useState(null);
+    const [uploadingPhoto, setUploadingPhoto] = useState(false);
     const [dateOfBirth, setDateOfBirth] = useState("");
     const [gender, setGender] = useState("");
     const [dateOfJoining, setDateOfJoining] = useState("");
@@ -66,10 +66,10 @@ function Profile() {
     }
 
     function handlePhotoChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    setPhotoFile(file);
-    setPhotoPreview(URL.createObjectURL(file));
+        const file = e.target.files[0];
+        if (!file) return;
+        setPhotoFile(file);
+        setPhotoPreview(URL.createObjectURL(file));
     }
 
     async function handleSave() {
@@ -104,135 +104,145 @@ function Profile() {
     }
 
     async function handlePhotoUpload() {
-    if (!photoFile) {
-        alert("Choose a photo first");
-        return;
-    }
-    setUploadingPhoto(true);
-    try {
-        const formData = new FormData();
-        formData.append("photo", photoFile);
-
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://127.0.0.1:5000/profile/photo", {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: formData,
-        });
-        const body = await response.json();
-        if (!response.ok) {
-            throw new Error(body.message || "Failed to upload photo");
+        if (!photoFile) {
+            alert("Choose a photo first");
+            return;
         }
+        setUploadingPhoto(true);
+        try {
+            const formData = new FormData();
+            formData.append("photo", photoFile);
 
-        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-        storedUser.profile_image = body.profile_image;
-        localStorage.setItem("user", JSON.stringify(storedUser));
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://127.0.0.1:5000/profile/photo", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            const body = await response.json();
+            if (!response.ok) {
+                throw new Error(body.message || "Failed to upload photo");
+            }
 
-        alert("Profile photo updated!");
-        setPhotoFile(null);
-    } catch (error) {
-        alert(error.message);
-    } finally {
-        setUploadingPhoto(false);
+            const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+            storedUser.profile_image = body.profile_image;
+            localStorage.setItem("user", JSON.stringify(storedUser));
+
+            alert("Profile photo updated!");
+            setPhotoFile(null);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setUploadingPhoto(false);
+        }
     }
+
+    if (loading) {
+        return (
+            <MainLayout>
+                <div className="page-container page-bg-people">Loading profile…</div>
+            </MainLayout>
+        );
     }
 
-    if (loading) return <div>Loading profile…</div>;
-    if (error && !isEditing) return <div style={{ color: "red" }}>{error}</div>;
+    if (error && !isEditing) {
+        return (
+            <MainLayout>
+                <div className="page-container page-bg-people">
+                    <div className="ui-card" style={{ color: "#A32E2E" }}>{error}</div>
+                </div>
+            </MainLayout>
+        );
+    }
 
     return (
         <MainLayout>
-        <div style={{padding: "20px"}}>
-            <h1>My Profile</h1>
-            <h2>Employee Details</h2>
+            <div className="page-container page-bg-people">
+                <div className="page-header">
+                    <h1>My Profile</h1>
+                    <p>Employee Details</p>
+                </div>
 
-            <div style={{ marginBottom: "20px" }}>
-    <img
-        src={
-            photoPreview ||
-            (JSON.parse(localStorage.getItem("user") || "{}").profile_image
-                ? `http://127.0.0.1:5000/uploads/${JSON.parse(localStorage.getItem("user")).profile_image}`
-                : "https://via.placeholder.com/120?text=No+Photo")
-        }
-        alt="Profile"
-        style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", display: "block", marginBottom: "10px" }}
-    />
-    <input type="file" accept="image/png, image/jpeg" onChange={handlePhotoChange} />
-    <button onClick={handlePhotoUpload} disabled={uploadingPhoto || !photoFile} style={{ marginLeft: "10px" }}>
-        {uploadingPhoto ? "Uploading…" : "Upload Photo"}
-    </button>
-    </div>
-            <div>
-                <label>First Name</label><br />
-                <input type="text" value={firstName} disabled={!isEditing} onChange={(e) => setFirstName(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Last Name</label><br />
-                <input type="text" value={lastName} disabled={!isEditing} onChange={(e) => setLastName(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Email</label><br />
-                <input type="email" value={email} disabled={!isEditing} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Phone</label><br />
-                <input type="text" value={phone} disabled={!isEditing} onChange={(e) => setPhone(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Address</label><br />
-                <input type="text" value={address} disabled={!isEditing} onChange={(e) => setAddress(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Date of Birth</label><br />
-                <input type="date" value={dateOfBirth} disabled={!isEditing} onChange={(e) => setDateOfBirth(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Gender</label><br />
-                <select value={gender} disabled={!isEditing} onChange={(e) => setGender(e.target.value)}>
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-                </select>
-            </div>
-            <br />
-            <div>
-                <label>Date of Joining</label><br />
-                <input type="date" value={dateOfJoining} disabled={!isEditing} onChange={(e) => setDateOfJoining(e.target.value)} />
-            </div>
-            <br />
-            <div>
-                <label>Employee Status</label><br />
-                <select value={employeeStatus} disabled={!isEditing} onChange={(e) => setEmployeeStatus(e.target.value)}>
-                <option value="Active">Active</option>
-                <option value="Resigned">Resigned</option>
-                <option value="Terminated">Terminated</option>
-            </select>
-            </div>
-            <br />
-                {/* TODO: once backend adds these columns to users/employees, replace
-                    getProfileExtras/saveProfileExtras with real GET/PUT /profile fields */}
-            <div>
-                <label>Designation (read-only)</label><br />
-                <input type="text" value={designation} disabled />
-            </div>
-            <br />
+                <div className="ui-card" style={{ maxWidth: "700px" }}>
+                    <div style={{ marginBottom: "20px" }}>
+                        <img
+                            src={
+                                photoPreview ||
+                                (JSON.parse(localStorage.getItem("user") || "{}").profile_image
+                                    ? `http://127.0.0.1:5000/uploads/${JSON.parse(localStorage.getItem("user")).profile_image}`
+                                    : "https://via.placeholder.com/120?text=No+Photo")
+                            }
+                            alt="Profile"
+                            style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", display: "block", marginBottom: "10px" }}
+                        />
+                        <input type="file" accept="image/png, image/jpeg" onChange={handlePhotoChange} />
+                        <button className="btn btn-outline btn-sm" onClick={handlePhotoUpload} disabled={uploadingPhoto || !photoFile} style={{ marginLeft: "10px" }}>
+                            {uploadingPhoto ? "Uploading…" : "Upload Photo"}
+                        </button>
+                    </div>
 
-            {!isEditing ? (
-                <button onClick={handleEdit}>Edit Profile</button>
-            ) : (
-                <button onClick={handleSave} disabled={saving}>
-                    {saving ? "Saving…" : "Save Profile"}
-                </button>
-            )}
-        </div>
-    </MainLayout>
+                    <div className="form-grid">
+                        <div className="field-group">
+                            <label>First Name</label>
+                            <input type="text" value={firstName} disabled={!isEditing} onChange={(e) => setFirstName(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Last Name</label>
+                            <input type="text" value={lastName} disabled={!isEditing} onChange={(e) => setLastName(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Email</label>
+                            <input type="email" value={email} disabled={!isEditing} onChange={(e) => setEmail(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Phone</label>
+                            <input type="text" value={phone} disabled={!isEditing} onChange={(e) => setPhone(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Address</label>
+                            <input type="text" value={address} disabled={!isEditing} onChange={(e) => setAddress(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Date of Birth</label>
+                            <input type="date" value={dateOfBirth} disabled={!isEditing} onChange={(e) => setDateOfBirth(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Gender</label>
+                            <select value={gender} disabled={!isEditing} onChange={(e) => setGender(e.target.value)}>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div className="field-group">
+                            <label>Date of Joining</label>
+                            <input type="date" value={dateOfJoining} disabled={!isEditing} onChange={(e) => setDateOfJoining(e.target.value)} />
+                        </div>
+                        <div className="field-group">
+                            <label>Employee Status</label>
+                            <select value={employeeStatus} disabled={!isEditing} onChange={(e) => setEmployeeStatus(e.target.value)}>
+                                <option value="Active">Active</option>
+                                <option value="Resigned">Resigned</option>
+                                <option value="Terminated">Terminated</option>
+                            </select>
+                        </div>
+                        <div className="field-group">
+                            <label>Designation (read-only)</label>
+                            <input type="text" value={designation} disabled />
+                        </div>
+                    </div>
+
+                    {!isEditing ? (
+                        <button className="btn btn-primary" onClick={handleEdit}>Edit Profile</button>
+                    ) : (
+                        <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
+                            {saving ? "Saving…" : "Save Profile"}
+                        </button>
+                    )}
+                </div>
+            </div>
+        </MainLayout>
     );
 }
 export default Profile;
