@@ -4,9 +4,9 @@ A full-stack web application for managing employees, leave requests, attendance,
 
 ## Team
 
-- Frontend: [Your name]
-- Backend: [Backend teammate name]
-- Database: [Database teammate name]
+- Frontend: [Pradeep Kumar, Monisha]
+- Backend: [Deepika Sridaran, Rachel Arem]
+- Database: [Sathish Kumar]
 
 ## Tech Stack
 
