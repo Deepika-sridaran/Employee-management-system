@@ -4,6 +4,7 @@ from models.user import User
 from models.leave_model import Leave
 from models.permission_model import Permission
 from models.payroll_model import Payroll
+from models.attendance_model import Attendance
 
 
 def get_dashboard():
@@ -28,6 +29,7 @@ def get_dashboard():
 
         # Department and user counts
         total_departments = Department.query.count()
+
         total_users = User.query.count()
 
 
@@ -67,6 +69,34 @@ def get_dashboard():
         total_payrolls = Payroll.query.count()
 
 
+        # Attendance counts
+        total_attendance = Attendance.query.count()
+
+        present_count = Attendance.query.filter_by(
+            status="Present"
+        ).count()
+
+        absent_count = Attendance.query.filter_by(
+            status="Absent"
+        ).count()
+
+        half_day_count = Attendance.query.filter_by(
+            status="Half Day"
+        ).count()
+
+        leave_count = Attendance.query.filter_by(
+            status="Leave"
+        ).count()
+
+        late_arrival_count = Attendance.query.filter_by(
+            late_arrival=True
+        ).count()
+
+        early_logout_count = Attendance.query.filter_by(
+            early_logout=True
+        ).count()
+
+
         return {
             "success": True,
             "message": "Dashboard data retrieved successfully",
@@ -104,6 +134,16 @@ def get_dashboard():
 
                 "payroll": {
                     "total": total_payrolls
+                },
+
+                "attendance": {
+                    "total": total_attendance,
+                    "present": present_count,
+                    "absent": absent_count,
+                    "half_day": half_day_count,
+                    "leave": leave_count,
+                    "late_arrivals": late_arrival_count,
+                    "early_logouts": early_logout_count
                 }
             }
         }, 200
