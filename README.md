@@ -11,7 +11,9 @@ A full-stack web application for managing employees, leave requests, attendance,
 ## Tech Stack
 
 **Backend:** Python, Flask, Flask-SQLAlchemy, Flask-JWT-Extended, Flask-Bcrypt, Flask-CORS
+
 **Database:** MySQL
+
 **Frontend:** React (Vite), React Router, React Bootstrap, Lucide Icons
 
 ## Features
