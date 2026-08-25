@@ -92,7 +92,9 @@ npm run dev
 ## Demo Credentials
 
 Role - Admin, Employee
+
 Email - admin@abctechnologies.com, tsppradeepkumar@gmail.com
+
 Password - Admin@123, Pradeep@27
 
 ## Known Limitations
