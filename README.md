@@ -101,4 +101,4 @@ npm run dev
 
 ## Screenshots
 
-![Login](image-1.png), ![Dashboard](image.png), ![Employee List](image-2.png), ![Approvals](image-3.png), ![Attendance](image-4.png), ![Payroll](image-5.png)
+![Login](image-1.png), ![Dashboard](image.png), ![Employee List](image-2.png), ![Approvals](image-3.png), ![Attendance](image-4.png), ![Payroll](image-5.png), ![Profile](image-6.png)
